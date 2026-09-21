@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Auto Backup rules for API 30 and below (API 31+ uses data_extraction_rules.xml).
+
+    Candy Triangle keeps every bit of durable state (crowns, best scores, lifetime
+    Candy Jar counts, unlocked/equipped ball skins and trails, seen gem intros and
+    audio settings - PRD §10) in DataStore Preferences, which writes to
+    filesDir/datastore/*.preferences_pb. Backing that directory up lets a player
+    keep their progress across a reinstall or a new device.
+
+    Declaring an <include> makes the backup set opt-in: nothing outside
+    files/datastore is uploaded. Nothing here is sensitive - no accounts,
+    no credentials, no personal data.
+-->
+<full-backup-content>
+    <include domain="file" path="datastore" />
+</full-backup-content>

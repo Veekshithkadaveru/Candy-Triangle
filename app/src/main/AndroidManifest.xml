@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+        NO NETWORK PERMISSIONS — DELIBERATE.
+
+        Candy Triangle is a fully offline game (PRD §13 Risks & Mitigation:
+        "Connectivity: Fully offline / No network permissions"). Every level definition,
+        physics constant and image asset ships inside the APK (assets/ + res/), and all
+        player progress lives on-device in DataStore Preferences (PRD §10). There is no
+        telemetry, no ads, no IAP and no remote config.
+
+        Do NOT add android.permission.INTERNET or ACCESS_NETWORK_STATE. Their absence is a
+        product requirement, not an oversight, and it also keeps the store listing clear of
+        the data-collection disclosures the offline design exists to avoid.
+    -->
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.CandyTriangle">
+        <!--
+            screenOrientation=portrait : the board is a 1000x1250u isosceles triangle
+                                         (PRD §3.1); landscape has no valid layout.
+            hardwareAccelerated=true   : the GameSurfaceView Canvas render loop (D1) must
+                                         stay on the GPU to hold 60fps.
+            configChanges=...          : config changes are handled in-process so the
+                                         SurfaceView and its GameThread are not destroyed
+                                         and recreated mid-drop (D1).
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.CandyTriangle"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

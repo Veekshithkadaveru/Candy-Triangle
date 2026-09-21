@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Backup / transfer rules for API 31+.
+
+    Same intent as backup_rules.xml: the only thing worth preserving is the
+    DataStore Preferences store under filesDir/datastore (PRD §10 - crowns,
+    best scores, Candy Jar counts, skins/trails, seen gem intros, audio
+    settings). Everything else (caches, decoded bitmaps) is regenerable.
+
+    disableIfNoEncryptionCapabilities is left off: game progress is not
+    sensitive, so a device without end-to-end encryption support should still
+    be able to restore it.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <include domain="file" path="datastore" />
+    </cloud-backup>
+    <device-transfer>
+        <include domain="file" path="datastore" />
+    </device-transfer>
+</data-extraction-rules>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Candy Triangle is an always-dark, edge-to-edge neon game. The XML theme only
+    has to cover the window before Compose takes over: dark window background, no
+    action bar, transparent system bars. All in-app colour comes from
+    ui/theme/Theme.kt (Material 3, dynamic colour deliberately disabled).
+
+    NOTE: the style name Theme.CandyTriangle is referenced by AndroidManifest.xml.
+-->
+<resources>
+
+    <style name="Theme.CandyTriangle" parent="android:Theme.Material.NoActionBar">
+        <!-- Window chrome -->
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/game_background</item>
+        <item name="android:colorBackground">@color/game_background</item>
+
+        <!-- Edge-to-edge: transparent bars, Compose owns the insets.
+             MainActivity additionally calls enableEdgeToEdge(). -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <!-- Always-dark surface => always light (white) system bar icons. -->
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Framework accents, for any non-Compose view that slips through -->
+        <item name="android:colorAccent">@color/world_1_peg_tint</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+
+        <!-- The game draws continuously; skip window transition work. -->
+        <item name="android:windowContentTransitions">false</item>
+    </style>
+
+</resources>

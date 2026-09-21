@@ -1,0 +1,332 @@
+{
+  "configVersion": 1,
+  "physics": {
+    "ballRadius": 16,
+    "pegRadius": 7,
+    "candyRadius": 22,
+    "gemRadius": 30,
+    "gravity": 1400,
+    "launchSpeed": 900,
+    "maxBallSpeed": 1600,
+    "restitutionPeg": 0.60,
+    "restitutionGem": 0.65,
+    "restitutionWall": 0.50,
+    "tangentialDamping": 0.98,
+    "physicsStepMs": 4.1667,
+    "deterministic": true,
+    "randomJitter": 0.0,
+    "stuckBall": {
+      "speedThreshold": 30,
+      "dwellSeconds": 1.0,
+      "impulseSpeed": 120,
+      "towardAxisX": 500,
+      "downward": true
+    },
+    "movingPegs": {
+      "introducedInWorld": 3,
+      "tangentialTransfer": 0.50,
+      "oscillation": "x(t) = x0 + A * sin(2 * PI * t / T)",
+      "defaultAmplitude": 40,
+      "defaultPeriodSeconds": 3.0
+    },
+    "antiTunnelling": {
+      "maxDisplacementPerStep": 6.67,
+      "smallestColliderRadius": 7,
+      "sweptCollisionRequired": false
+    }
+  },
+  "board": {
+    "width": 1000,
+    "height": 1250,
+    "apex": { "x": 500, "y": 0 },
+    "centerAxisX": 500,
+    "baseY": 1250,
+    "baseWidth": 1000,
+    "baseOpen": true,
+    "launcherZone": { "yTop": 0, "yBottom": 150 },
+    "latticeBand": { "yTop": 150, "yBottom": 1170 },
+    "cupLane": { "yTop": 1280, "yBottom": 1330 },
+    "walls": {
+      "slantDegreesFromVertical": 21.8,
+      "left": { "x1": 500, "y1": 0, "x2": 0, "y2": 1250 },
+      "right": { "x1": 500, "y1": 0, "x2": 1000, "y2": 1250 }
+    },
+    "lattice": {
+      "type": "EQUILATERAL_TRIANGULAR",
+      "spacingMin": 66,
+      "spacingMax": 90,
+      "rowSpacingFactor": 0.8660254,
+      "clipToInterior": true
+    },
+    "launcher": {
+      "pivot": { "x": 500, "y": 0 },
+      "aimClampDegrees": 70,
+      "aimReference": "STRAIGHT_DOWN",
+      "aimGuideStopsAtFirstContact": true,
+      "aimGuideDotted": true,
+      "maxSimultaneousBalls": 1
+    }
+  },
+  "cup": {
+    "cupWidth": 180,
+    "catchScore": 100,
+    "catchRefundBalls": 1,
+    "speedMin": 200,
+    "speedMax": 380,
+    "laneYTop": 1280,
+    "laneYBottom": 1330
+  },
+  "chains": {
+    "sugarPopChain": 3,
+    "sugarPopRadiusFactor": 2.0,
+    "extraBallChain": 5,
+    "extraBallMaxPerLaunchedBall": 1,
+    "chainResetValueOnColourChange": 1,
+    "gemHitBreaksChain": false,
+    "onlyDirectContactExtendsChain": true,
+    "effectPoppedCandiesExtendChain": false,
+    "magnetPullCountsAsDirectContact": true
+  },
+  "scoring": {
+    "directCandyPointsPerChainPosition": 10,
+    "directCandyPointsCap": 100,
+    "poppedCandyPoints": 10,
+    "gemBrokenPoints": 50,
+    "cupCatchPoints": 100,
+    "sugarRushPointsPerRemainingBall": 500,
+    "dropMultiplier": {
+      "source": "HIGHEST_GEM_MULTIPLIER_IN_DROP",
+      "floor": 1,
+      "appliesTo": "DROP_SUBTOTAL",
+      "formula": "dropScore = dropSubtotal * max(highestGemMultiplierInDrop, 1)"
+    },
+    "crowns": {
+      "maxCrowns": 3,
+      "source": "BALLS_REMAINING",
+      "tier1RequiresObjectivesComplete": true,
+      "tier2BallsRemainingFrom": "level.crowns[0]",
+      "tier3BallsRemainingFrom": "level.crowns[1]"
+    }
+  },
+  "gems": [
+    {
+      "key": "SWEET",
+      "sprite": "x5",
+      "name": "Sweet Gem",
+      "colorName": "Purple",
+      "multiplier": 5,
+      "introLevel": 3,
+      "effect": { "type": "NONE" }
+    },
+    {
+      "key": "BLAST",
+      "sprite": "x10_1",
+      "name": "Blast Gem",
+      "colorName": "Gold",
+      "multiplier": 10,
+      "introLevel": 6,
+      "effect": { "type": "POP_RADIUS", "radiusFactor": 2.5 }
+    },
+    {
+      "key": "LINE",
+      "sprite": "x10_cyan",
+      "name": "Line Gem",
+      "colorName": "Cyan",
+      "multiplier": 10,
+      "introLevel": 11,
+      "effect": { "type": "POP_BAND", "bandRows": 0.5 }
+    },
+    {
+      "key": "SPLIT",
+      "sprite": "x15",
+      "name": "Split Gem",
+      "colorName": "Red",
+      "multiplier": 15,
+      "introLevel": 15,
+      "effect": { "type": "SPLIT_BALL", "clones": 1, "mirrorHorizontalVelocity": true }
+    },
+    {
+      "key": "EXTRA_BALL",
+      "sprite": "x25",
+      "name": "Extra Ball",
+      "colorName": "Green",
+      "multiplier": 25,
+      "introLevel": 21,
+      "effect": { "type": "REFUND_BALLS", "balls": 1 }
+    },
+    {
+      "key": "MAGNET",
+      "sprite": "x35",
+      "name": "Magnet Gem",
+      "colorName": "Blue",
+      "multiplier": 35,
+      "introLevel": 25,
+      "effect": { "type": "MAGNET", "durationSeconds": 2.0, "radiusFactor": 3.0 }
+    },
+    {
+      "key": "SUGAR_STORM",
+      "sprite": "x80",
+      "name": "Sugar Storm",
+      "colorName": "Crimson",
+      "multiplier": 80,
+      "introLevel": 31,
+      "effect": { "type": "POP_ALL_OF_LARGEST_COLOUR", "maxPerLevel": 1 }
+    }
+  ],
+  "clearance": {
+    "ballClearancePadding": 4,
+    "minSpacingBallBetweenPegs": 50.0,
+    "minSpacingCandyInLatticeGap": 50.2,
+    "minSpacingBallBetweenGemAndPeg": 73.0,
+    "minPegEdgeToWall": 36,
+    "rules": [
+      {
+        "id": "BALL_BETWEEN_PEGS",
+        "condition": "d - 2 * pegRadius >= 2 * ballRadius + 4",
+        "minSpacing": 50.0,
+        "minPegEdgeToWall": null,
+        "enforcement": "NONE"
+      },
+      {
+        "id": "CANDY_IN_LATTICE_GAP",
+        "condition": "candyRadius + pegRadius <= d / sqrt(3)",
+        "minSpacing": 50.2,
+        "minPegEdgeToWall": null,
+        "enforcement": "NONE"
+      },
+      {
+        "id": "BALL_BETWEEN_GEM_AND_PEG",
+        "condition": "d - gemRadius - pegRadius >= 2 * ballRadius + 4",
+        "minSpacing": 73.0,
+        "minPegEdgeToWall": null,
+        "enforcement": "REMOVE_PEGS_ADJACENT_TO_GEM"
+      },
+      {
+        "id": "BALL_BETWEEN_PEG_AND_WALL",
+        "condition": "pegEdgeToWallDistance >= 36",
+        "minSpacing": null,
+        "minPegEdgeToWall": 36,
+        "enforcement": "CLIP_OUTER_BORDER_PEGS"
+      }
+    ]
+  },
+  "worlds": [
+    {
+      "index": 1,
+      "name": "Sugar Stage",
+      "levelFrom": 1,
+      "levelTo": 10,
+      "backdrop": "world_1",
+      "pegTint": "#FF4FC8",
+      "pegTintName": "Pink",
+      "ballsFrom": 12,
+      "ballsTo": 10,
+      "spacingFrom": 90,
+      "spacingTo": 84,
+      "cupSpeed": 200,
+      "movingPegRows": false
+    },
+    {
+      "index": 2,
+      "name": "Velvet Swirl",
+      "levelFrom": 11,
+      "levelTo": 20,
+      "backdrop": "world_2",
+      "pegTint": "#3FE3FF",
+      "pegTintName": "Cyan",
+      "ballsFrom": 11,
+      "ballsTo": 9,
+      "spacingFrom": 84,
+      "spacingTo": 78,
+      "cupSpeed": 260,
+      "movingPegRows": false
+    },
+    {
+      "index": 3,
+      "name": "Neon Ribbons",
+      "levelFrom": 21,
+      "levelTo": 30,
+      "backdrop": "world_3",
+      "pegTint": "#A56BFF",
+      "pegTintName": "Violet",
+      "ballsFrom": 10,
+      "ballsTo": 9,
+      "spacingFrom": 78,
+      "spacingTo": 72,
+      "cupSpeed": 320,
+      "movingPegRows": true
+    },
+    {
+      "index": 4,
+      "name": "Golden Thread",
+      "levelFrom": 31,
+      "levelTo": 40,
+      "backdrop": "world_4",
+      "pegTint": "#FFC23F",
+      "pegTintName": "Gold",
+      "ballsFrom": 10,
+      "ballsTo": 8,
+      "spacingFrom": 72,
+      "spacingTo": 66,
+      "cupSpeed": 380,
+      "movingPegRows": true
+    }
+  ],
+  "gates": [
+    { "world": 2, "requiresLevelCleared": 10, "crownsRequired": 15, "maxAvailableCrowns": 30 },
+    { "world": 3, "requiresLevelCleared": 20, "crownsRequired": 35, "maxAvailableCrowns": 60 },
+    { "world": 4, "requiresLevelCleared": 30, "crownsRequired": 55, "maxAvailableCrowns": 90 }
+  ],
+  "jar": {
+    "tier1Threshold": 40,
+    "tier2Threshold": 120,
+    "tier3Threshold": 200,
+    "tierThresholds": [40, 120, 200],
+    "bankCandiesOnFailedLevels": true,
+    "defaultBallSkin": "DEFAULT",
+    "defaultBallSkinSprite": "ball",
+    "defaultTrail": "NONE",
+    "jars": [
+      {
+        "color": "GREEN",
+        "tier1BallSkin": "GREEN",
+        "tier1BallSkinSprite": "ball_green",
+        "tier2Trail": "GREEN",
+        "tier3SweetRoom": "B1"
+      },
+      {
+        "color": "PURPLE",
+        "tier1BallSkin": "PURPLE",
+        "tier1BallSkinSprite": "ball_purple",
+        "tier2Trail": "PURPLE",
+        "tier3SweetRoom": "B2"
+      },
+      {
+        "color": "PINK",
+        "tier1BallSkin": "GOLD",
+        "tier1BallSkinSprite": "ball_gold",
+        "tier2Trail": "PINK",
+        "tier3SweetRoom": "B3"
+      },
+      {
+        "color": "BLUE",
+        "tier1BallSkin": "BLUE",
+        "tier1BallSkinSprite": "ball_blue",
+        "tier2Trail": "BLUE",
+        "tier3SweetRoom": "B4"
+      }
+    ],
+    "sweetRoomBalls": 15
+  },
+  "candies": {
+    "sensor": true,
+    "placedAtLatticeGapCenters": true,
+    "seededRandomPlacement": true,
+    "colors": [
+      { "key": "GREEN", "sprite": "can_1", "hex": "#3DE84B" },
+      { "key": "PURPLE", "sprite": "can_2", "hex": "#B23CF0" },
+      { "key": "PINK", "sprite": "can_3", "hex": "#FF4FC8" },
+      { "key": "BLUE", "sprite": "can_4", "hex": "#33A0FF" }
+    ]
+  }
+}

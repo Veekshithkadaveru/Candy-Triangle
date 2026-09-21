@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Durable strings only. Screen-specific copy (results screens, intro dialogs,
+    settings blurbs, etc.) is authored in phases D1-D4 by the screens that own it.
+-->
+<resources>
+
+    <string name="app_name">Candy Triangle</string>
+
+    <!-- ============ Generic actions ============ -->
+    <string name="action_play">Play</string>
+    <string name="action_back">Back</string>
+    <string name="action_close">Close</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_continue">Continue</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_resume">Resume</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_quit">Quit</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_home">Home</string>
+
+    <!-- ============ Generic labels ============ -->
+    <string name="label_level">Level</string>
+    <string name="label_score">Score</string>
+    <string name="label_best">Best</string>
+    <string name="label_balls">Balls</string>
+    <string name="label_crowns">Crowns</string>
+    <string name="label_candy_jar">Candy Jar</string>
+    <string name="label_locked">Locked</string>
+    <string name="label_on">On</string>
+    <string name="label_off">Off</string>
+    <string name="label_sound">Sound</string>
+    <string name="label_music">Music</string>
+    <string name="label_vibration">Vibration</string>
+
+    <!-- ============ Worlds (PRD §6.1) ============ -->
+    <string name="world_1_name">Sugar Stage</string>
+    <string name="world_2_name">Velvet Swirl</string>
+    <string name="world_3_name">Neon Ribbons</string>
+    <string name="world_4_name">Golden Thread</string>
+
+    <!-- ============ Candy colours (PRD §4.1) ============ -->
+    <string name="candy_name_green">Green</string>
+    <string name="candy_name_purple">Purple</string>
+    <string name="candy_name_pink">Pink</string>
+    <string name="candy_name_blue">Blue</string>
+
+    <!-- ============ Gems (PRD §4.2) ============ -->
+    <string name="gem_name_sweet">Sweet Gem</string>
+    <string name="gem_name_blast">Blast Gem</string>
+    <string name="gem_name_line">Line Gem</string>
+    <string name="gem_name_split">Split Gem</string>
+    <string name="gem_name_extra_ball">Extra Ball</string>
+    <string name="gem_name_magnet">Magnet Gem</string>
+    <string name="gem_name_sugar_storm">Sugar Storm</string>
+
+    <!-- ============ Mechanics (PRD §4.1, §5.1) ============ -->
+    <string name="mechanic_sugar_pop">Sugar Pop</string>
+    <string name="mechanic_sugar_rush">Sugar Rush</string>
+    <string name="mechanic_sweet_room">Sweet Room</string>
+    <string name="mechanic_candy_cup">Candy Cup</string>
+
+    <!-- ============ Content descriptions ============ -->
+    <string name="cd_app_emblem">Candy Triangle emblem</string>
+    <string name="cd_crown_earned">Crown earned</string>
+    <string name="cd_crown_locked">Crown not earned</string>
+
+</resources>

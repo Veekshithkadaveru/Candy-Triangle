@@ -14,8 +14,8 @@ import kotlin.math.sqrt
 class Candy(
     val id: Int,
     val color: CandyColor,
-    val x: Float,
-    val y: Float,
+    var x: Float,
+    var y: Float,
     val rc: RowCol,
 ) {
     /** True if this candy is still on the board. */

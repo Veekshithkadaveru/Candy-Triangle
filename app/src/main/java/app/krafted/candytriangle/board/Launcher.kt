@@ -68,7 +68,14 @@ class Launcher(
 
         path.add(BoardPoint(ghost.x, ghost.y))
 
+        val movingPegs = world.pegs.filter { it.motion != null }
+
         for (i in 0 until maxSteps) {
+            if (movingPegs.isNotEmpty()) {
+                val ghostTime = world.timeSeconds + i * params.dt
+                for (peg in movingPegs) peg.updateMotion(ghostTime)
+            }
+
             world.integrate(ghost)
             world.resolveContacts(ghost, listener)
 
@@ -86,6 +93,12 @@ class Launcher(
                 path.add(BoardPoint(ghost.x, ghost.y))
                 break
             }
+        }
+
+        // Restore moving pegs to actual world time
+        if (movingPegs.isNotEmpty()) {
+            val actualTime = world.timeSeconds
+            for (peg in movingPegs) peg.updateMotion(actualTime)
         }
 
         return path

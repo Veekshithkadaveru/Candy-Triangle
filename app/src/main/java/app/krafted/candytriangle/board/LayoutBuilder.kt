@@ -71,6 +71,10 @@ object LayoutBuilder {
             }
         }
 
+        val movingRowsMap = if (config.worlds.firstOrNull { it.index == level.world }?.movingPegRows != false) {
+            level.layout.movingRows.associateBy { it.row }
+        } else emptyMap()
+
         val gemMap = level.gems.associateBy { RowCol(it.row, it.col) }
         val clearanceConfig = config.clearance
         val contact = Contact()
@@ -85,14 +89,18 @@ object LayoutBuilder {
             val x = centerX + (c - r / 2.0f) * d
             val y = startY + r * rowHeight
             
+            val movingDef = movingRowsMap[r]
+            val amplitude = movingDef?.amplitude ?: 0f
+            val absAmp = kotlin.math.abs(amplitude)
+            
             // Check wall clearance (Rule: Ball between Peg & Wall)
-            // Peg edge to wall distance >= 36u
-            // This means distance from center to wall >= 36 + pegRadius (Wait, pegEdge to Wall is exactly center to wall - pegRadius?
-            // The PRD says "Peg edge to wall distance >= 36u". The distance between peg center and wall is distance - pegRadius.
-            // WallSegment.contact tests circle overlap. If a circle of radius = 36 + pegRadius overlaps the wall, it's too close!
             var tooCloseToWall = false
+            val minRadius = clearanceConfig.minPegEdgeToWall + params.pegRadius
             for (wall in walls) {
-                if (wall.contact(x, y, clearanceConfig.minPegEdgeToWall + params.pegRadius, contact)) {
+                // Check resting position and both extremes of the swing
+                if (wall.contact(x, y, minRadius, contact) ||
+                    (absAmp > 0f && (wall.contact(x - absAmp, y, minRadius, contact) || wall.contact(x + absAmp, y, minRadius, contact)))
+                ) {
                     tooCloseToWall = true
                     break
                 }
@@ -124,14 +132,11 @@ object LayoutBuilder {
             preliminaryPegs.removeIf { it.rc in pegsToRemove }
         }
 
-        // Map moving rows
-        val movingRowsMap = level.layout.movingRows.associateBy { it.row }
-
         // Final output
         val finalPegs = mutableListOf<Peg>()
         for (tp in preliminaryPegs) {
             val movingDef = movingRowsMap[tp.rc.row]
-            val motion = if (movingDef != null && config.worlds.firstOrNull { it.index == level.world }?.movingPegRows != false) {
+            val motion = if (movingDef != null) {
                 PegMotion(tp.x, movingDef.amplitude, movingDef.periodSeconds)
             } else null
 

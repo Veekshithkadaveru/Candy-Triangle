@@ -68,16 +68,17 @@ class LevelRepository(
         // Everything below is plain blocking code — AssetSource.readText is not suspending — so
         // no cancellation can originate inside the catch, which is what makes the broad
         // RuntimeException catch safe (CancellationException is an IllegalStateException).
-        val json = assets.readText(assetPath)
-        if (json == null) {
-            Log.i(LEVEL_LOG_TAG, "No '$assetPath' asset; starting with an empty level catalogue")
-            return@withContext LevelCatalog.EMPTY
-        }
         try {
+            val json = assets.readText(assetPath)
+            if (json == null) {
+                Log.i(LEVEL_LOG_TAG, "No '$assetPath' asset; starting with an empty level catalogue")
+                return@withContext LevelCatalog.EMPTY
+            }
             parse(json)
         } catch (e: RuntimeException) {
             // Gson raises JsonParseException / IllegalStateException / NumberFormatException
             // depending on how the JSON is wrong. None of them should reach the UI.
+            // AssetSource can also throw RuntimeException.
             Log.w(LEVEL_LOG_TAG, "Could not parse '$assetPath'; using an empty catalogue", e)
             LevelCatalog.EMPTY
         }

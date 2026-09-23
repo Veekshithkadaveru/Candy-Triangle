@@ -5,26 +5,22 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import app.krafted.candytriangle.ui.nav.CandyNavHost
 import app.krafted.candytriangle.ui.theme.CandyTriangleTheme
 
 /**
  * Single-activity host for Candy Triangle.
  *
- * Phase A1 scope only: window setup (edge-to-edge, sticky immersive, keep-screen-on) plus a
- * placeholder surface. The navigation graph, screens and ViewModels arrive in D1-D4.
+ * Owns exactly two things: the window setup from phase A1 (edge-to-edge, sticky immersive,
+ * keep-screen-on) and the one `CandyNavHost` that carries every screen. Screens, ViewModels and
+ * routes all live under `ui/`; nothing but the navigation graph is referenced from here, so D3 and
+ * D4 add destinations without touching this file.
+ *
+ * The activity is portrait-locked and swallows `configChanges` (see `AndroidManifest.xml`), so a
+ * rotation can neither recreate it nor destroy a level in progress.
  */
 class MainActivity : ComponentActivity() {
 
@@ -40,7 +36,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             CandyTriangleTheme {
-                CandyTrianglePlaceholder()
+                CandyNavHost()
             }
         }
     }
@@ -60,22 +56,5 @@ class MainActivity : ComponentActivity() {
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             hide(WindowInsetsCompat.Type.systemBars())
         }
-    }
-}
-
-@Composable
-private fun CandyTrianglePlaceholder() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF12061F)),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = "Candy Triangle",
-            color = Color(0xFFFF4FC8),
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-        )
     }
 }

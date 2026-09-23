@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Candy Jar (D2) copy. A separate file from res/values/strings.xml, which holds only durable
+    cross-screen strings and is shared with the other D1/D2 workstreams — screen-specific copy is
+    authored by the screen that owns it.
+
+    Generic labels this screen reuses from strings.xml rather than duplicating:
+    label_candy_jar, label_locked, label_off, action_back, candy_name_green/purple/pink/blue.
+-->
+<resources>
+
+    <!-- ============ Screen chrome ============ -->
+    <string name="jar_subtitle">Candies collected from every level, win or lose</string>
+    <string name="jar_total_format">%1$d candies banked</string>
+
+    <!-- ============ Per-jar readout ============ -->
+    <!-- e.g. "Green Jar" -->
+    <string name="jar_name_format">%1$s Jar</string>
+    <string name="jar_count_format">%1$d / %2$d</string>
+    <string name="jar_tier_format">Tier %1$d of %2$d</string>
+    <!-- e.g. "12 more for Tier 2" -->
+    <string name="jar_next_tier_format">%1$d more for Tier %2$d</string>
+    <string name="jar_all_tiers">All tiers unlocked</string>
+    <string name="jar_cd_format">%1$s jar, %2$d candies, tier %3$d of %4$d</string>
+
+    <!-- ============ Reward slots (PRD §7) ============ -->
+    <string name="jar_reward_skin_format">%1$s Ball</string>
+    <string name="jar_reward_trail_format">%1$s Trail</string>
+    <!-- e.g. "Sweet Room B1" -->
+    <string name="jar_reward_sweet_room_format">Sweet Room %1$s</string>
+    <string name="jar_reward_threshold_format">%1$d</string>
+
+    <!-- ============ Cosmetic selector ============ -->
+    <string name="jar_section_skins">Ball Skins</string>
+    <string name="jar_section_trails">Candy Trails</string>
+    <string name="jar_equipped">Equipped</string>
+
+    <!-- ============ Ball skins (PRD §7 tier 1) ============ -->
+    <string name="skin_name_default">Classic</string>
+    <string name="skin_name_green">Green</string>
+    <string name="skin_name_purple">Purple</string>
+    <string name="skin_name_blue">Blue</string>
+    <string name="skin_name_gold">Gold</string>
+
+    <!-- ============ Candy trails (PRD §7 tier 2) ============ -->
+    <string name="trail_name_none">No Trail</string>
+    <string name="trail_name_green">Green</string>
+    <string name="trail_name_purple">Purple</string>
+    <string name="trail_name_pink">Pink</string>
+    <string name="trail_name_blue">Blue</string>
+
+</resources>

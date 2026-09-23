@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copy owned by the gameplay screen (`ui/game`, phase D1).
+
+    Lives in its own file rather than in `strings.xml`: that one holds durable, cross-screen
+    vocabulary and is edited by every phase, so screen-specific copy is authored beside the screen
+    that owns it. Durable labels this screen reuses (label_score, label_balls, action_resume,
+    action_retry, action_quit, candy_name_*, gem_name_*) still come from `strings.xml`.
+-->
+<resources>
+
+    <!-- ============ Level identity ============ -->
+    <string name="game_level_label">Level %1$d</string>
+    <string name="game_sweet_room_label">Sweet Room %1$s</string>
+
+    <!-- ============ Objectives (PRD §6.3) ============ -->
+    <string name="game_objective_progress">%1$d / %2$d</string>
+    <string name="game_objective_collect_candy_any">Collect %1$d candies</string>
+    <string name="game_objective_collect_candy_color">Collect %1$d %2$s</string>
+    <string name="game_objective_score">Score %1$d</string>
+    <string name="game_objective_collect_gem_any">Smash %1$d gems</string>
+    <string name="game_objective_collect_gem_type">Smash %1$d %2$s</string>
+    <string name="game_objective_clear_color">Clear every %1$s</string>
+    <string name="game_objective_chain">Chain of %1$d</string>
+    <string name="game_objective_chain_repeat">Chain of %1$d, %2$d times</string>
+    <string name="game_objective_cup">Catch %1$d in the Candy Cup</string>
+    <string name="game_objective_none">Clear the board</string>
+
+    <!-- ============ Scoreboard and ball counter ============ -->
+    <string name="game_balls_of_total">%1$d / %2$d</string>
+    <string name="game_drop_bonus">+%1$d</string>
+    <string name="game_drop_multiplier">×%1$d</string>
+    <string name="game_score_pending">+%1$d</string>
+
+    <!-- ============ Chain garnish (PRD §4.1) ============ -->
+    <string name="game_chain_banner">Chain ×%1$d</string>
+    <string name="game_sugar_pop_banner">Sugar Pop! +%1$d</string>
+
+    <!-- ============ Pause ============ -->
+    <string name="game_pause_title">Paused</string>
+    <string name="game_pause_message">The board is frozen. Pick up where you left off, start the level over, or head back.</string>
+    <string name="game_pause_restart">Restart level</string>
+
+    <!-- ============ Loading and failure ============ -->
+    <string name="game_loading">Building the board…</string>
+    <string name="game_error_level_not_found">Level %1$d is not in the level catalogue.</string>
+    <string name="game_error_unexpected">This level could not be loaded.</string>
+
+    <!-- ============ Content descriptions ============ -->
+    <string name="cd_game_pause">Pause the level</string>
+    <string name="cd_game_board">Game board — drag to aim, release to fire</string>
+    <string name="cd_game_balls_remaining">%1$d balls remaining of %2$d</string>
+    <string name="cd_game_objective_complete">Objective complete</string>
+
+</resources>

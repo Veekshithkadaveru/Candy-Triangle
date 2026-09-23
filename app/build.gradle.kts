@@ -78,3 +78,8 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
+// The C2 suite (§11) reads src/main/assets/{config,levels}.json from disk, which Gradle would not
+// otherwise see as a test input — a regenerated levels.json must re-run the tests, not hit the cache.
+tasks.withType<Test>().configureEach {
+    inputs.dir("src/main/assets").withPropertyName("gameAssets").withPathSensitivity(PathSensitivity.RELATIVE)
+}

@@ -11,6 +11,9 @@ import app.krafted.candytriangle.level.GemEffect
  */
 object GemEffectHandlers {
 
+    /** √3/2, the §3.1 equilateral row factor; the default of `LatticeDef.rowSpacingFactor`. */
+    const val EQUILATERAL_ROW_SPACING_FACTOR: Float = 0.8660254f
+
     /**
      * Resolves the effect against the current board state.
      * 
@@ -19,6 +22,9 @@ object GemEffectHandlers {
      * @param state the BoardState for spatial queries
      * @param latticeSpacing the `d` spacing parameter for the level
      * @param remainingSugarStorms how many Sugar Storms are left this level
+     * @param rowSpacingFactor lattice row height as a fraction of `d` —
+     *   `config.board.lattice.rowSpacingFactor` (√3/2 for §3.1's equilateral lattice). Sets the
+     *   height of one row for the Line Gem's band.
      */
     fun applyEffect(
         effect: GemEffect, 
@@ -26,6 +32,7 @@ object GemEffectHandlers {
         state: BoardState, 
         latticeSpacing: Float,
         remainingSugarStorms: Int = 1,
+        rowSpacingFactor: Float = EQUILATERAL_ROW_SPACING_FACTOR,
     ): EffectResult {
         var poppedCandies = emptyList<Candy>()
         var spawnBalls = 0
@@ -45,8 +52,8 @@ object GemEffectHandlers {
                 poppedCandies = state.getCandiesInRadius(gem.x, gem.y, r)
             }
             is GemEffect.PopBand -> {
-                // Line Gem: pops candies within plus or minus bandRows * equilateral row height.
-                val rowHeight = latticeSpacing * 0.8660254f
+                // Line Gem: pops candies within plus or minus bandRows * the lattice row height.
+                val rowHeight = latticeSpacing * rowSpacingFactor
                 val halfHeight = effect.bandRows * rowHeight
                 poppedCandies = state.getCandiesInBand(gem.y, halfHeight)
             }

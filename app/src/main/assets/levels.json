@@ -1,0 +1,1640 @@
+{
+  "schemaVersion": 1,
+  "levels": [
+    {
+      "id": 1,
+      "world": 1,
+      "balls": 12,
+      "crowns": [3, 6],
+      "layout": {
+        "spacing": 90,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 107,
+        "count": 28,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [],
+      "cup": { "speed": 200 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "count": 11 }
+      ]
+    },
+    {
+      "id": 2,
+      "world": 1,
+      "balls": 12,
+      "crowns": [3, 6],
+      "layout": {
+        "spacing": 89,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 207,
+        "count": 30,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 2, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [],
+      "cup": { "speed": 200 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "color": "PINK", "count": 6 }
+      ]
+    },
+    {
+      "id": 3,
+      "world": 1,
+      "balls": 12,
+      "crowns": [3, 6],
+      "layout": {
+        "spacing": 89,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 307,
+        "count": 30,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SWEET", "row": 4, "col": 2 },
+        { "type": "SWEET", "row": 7, "col": 2 },
+        { "type": "SWEET", "row": 7, "col": 5 }
+      ],
+      "cup": { "speed": 200 },
+      "objectives": [
+        { "type": "COLLECT_GEM", "gem": "SWEET", "count": 2 }
+      ]
+    },
+    {
+      "id": 4,
+      "world": 1,
+      "balls": 11,
+      "crowns": [3, 6],
+      "layout": {
+        "spacing": 88,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 407,
+        "count": 32,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SWEET", "row": 5, "col": 2 },
+        { "type": "SWEET", "row": 8, "col": 3 },
+        { "type": "SWEET", "row": 8, "col": 6 }
+      ],
+      "cup": { "speed": 200 },
+      "objectives": [
+        { "type": "SCORE", "score": 1000 }
+      ]
+    },
+    {
+      "id": 5,
+      "world": 1,
+      "balls": 11,
+      "crowns": [3, 6],
+      "layout": {
+        "spacing": 87,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 507,
+        "count": 32,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 2 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SWEET", "row": 6, "col": 2 },
+        { "type": "SWEET", "row": 6, "col": 4 }
+      ],
+      "cup": { "speed": 200 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "color": "BLUE", "count": 9 },
+        { "type": "CUP", "count": 1 }
+      ]
+    },
+    {
+      "id": 6,
+      "world": 1,
+      "balls": 11,
+      "crowns": [3, 6],
+      "layout": {
+        "spacing": 87,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 607,
+        "count": 34,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "BLAST", "row": 4, "col": 2 },
+        { "type": "BLAST", "row": 8, "col": 2 },
+        { "type": "BLAST", "row": 8, "col": 6 },
+        { "type": "SWEET", "row": 10, "col": 4 }
+      ],
+      "cup": { "speed": 200 },
+      "objectives": [
+        { "type": "COLLECT_GEM", "gem": "BLAST", "count": 2 }
+      ]
+    },
+    {
+      "id": 7,
+      "world": 1,
+      "balls": 11,
+      "crowns": [3, 6],
+      "layout": {
+        "spacing": 86,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 707,
+        "count": 34,
+        "weights": { "GREEN": 1, "PURPLE": 2, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "BLAST", "row": 6, "col": 3 },
+        { "type": "SWEET", "row": 9, "col": 2 },
+        { "type": "SWEET", "row": 9, "col": 7 }
+      ],
+      "cup": { "speed": 200 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "color": "PURPLE", "count": 7 }
+      ]
+    },
+    {
+      "id": 8,
+      "world": 1,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 85,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 807,
+        "count": 36,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 2, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "BLAST", "row": 5, "col": 2 },
+        { "type": "BLAST", "row": 9, "col": 6 },
+        { "type": "SWEET", "row": 7, "col": 4 }
+      ],
+      "cup": { "speed": 200 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "color": "PINK", "count": 9 },
+        { "type": "SCORE", "score": 3000 }
+      ]
+    },
+    {
+      "id": 9,
+      "world": 1,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 85,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 907,
+        "count": 36,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SWEET", "row": 5, "col": 3 },
+        { "type": "BLAST", "row": 8, "col": 2 },
+        { "type": "BLAST", "row": 10, "col": 7 }
+      ],
+      "cup": { "speed": 200 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "count": 18 },
+        { "type": "CUP", "count": 2 }
+      ]
+    },
+    {
+      "id": 10,
+      "world": 1,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 84,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 1007,
+        "count": 38,
+        "weights": { "GREEN": 2, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "BLAST", "row": 4, "col": 2 },
+        { "type": "SWEET", "row": 7, "col": 2 },
+        { "type": "SWEET", "row": 7, "col": 5 },
+        { "type": "BLAST", "row": 10, "col": 5 }
+      ],
+      "cup": { "speed": 200 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "color": "GREEN", "count": 11 },
+        { "type": "SCORE", "score": 4000 }
+      ]
+    },
+    {
+      "id": 11,
+      "world": 2,
+      "balls": 11,
+      "crowns": [3, 6],
+      "layout": {
+        "spacing": 84,
+        "pattern": "FULL",
+        "holes": [[0, 0], [5, 2], [5, 3], [6, 2], [6, 3], [6, 4], [7, 3], [7, 4]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 1107,
+        "count": 36,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "LINE", "row": 4, "col": 2 },
+        { "type": "LINE", "row": 9, "col": 2 },
+        { "type": "LINE", "row": 9, "col": 7 },
+        { "type": "SWEET", "row": 11, "col": 5 }
+      ],
+      "cup": { "speed": 260 },
+      "objectives": [
+        { "type": "COLLECT_GEM", "gem": "LINE", "count": 2 }
+      ]
+    },
+    {
+      "id": 12,
+      "world": 2,
+      "balls": 11,
+      "crowns": [3, 6],
+      "layout": {
+        "spacing": 83,
+        "pattern": "CLUSTERS",
+        "holes": [],
+        "clusters": [
+          {
+            "nodes": [[2, 0], [2, 1], [3, 0], [3, 1], [3, 2], [4, 1], [4, 2]]
+          },
+          {
+            "nodes": [[5, 1], [5, 2], [6, 1], [6, 2], [6, 3], [7, 2], [7, 3]]
+          },
+          {
+            "nodes": [[5, 3], [5, 4], [6, 3], [6, 4], [6, 5], [7, 4], [7, 5]]
+          },
+          {
+            "nodes": [[8, 2], [8, 3], [9, 2], [9, 3], [9, 4], [10, 3], [10, 4]]
+          },
+          {
+            "nodes": [[8, 5], [8, 6], [9, 5], [9, 6], [9, 7], [10, 6], [10, 7]]
+          },
+          {
+            "nodes": [[11, 3], [11, 4], [12, 3], [12, 4], [12, 5], [13, 4], [13, 5]]
+          },
+          {
+            "nodes": [[11, 7], [11, 8], [12, 7], [12, 8], [12, 9], [13, 8], [13, 9]]
+          }
+        ],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 1207,
+        "count": 36,
+        "weights": { "GREEN": 2, "PURPLE": 1, "PINK": 2, "BLUE": 0 },
+        "fixed": [
+          { "color": "BLUE", "row": 2, "col": 1 },
+          { "color": "BLUE", "row": 7, "col": 9 },
+          { "color": "BLUE", "row": 12, "col": 9 }
+        ]
+      },
+      "gems": [
+        { "type": "BLAST", "row": 6, "col": 3 },
+        { "type": "LINE", "row": 9, "col": 6 }
+      ],
+      "cup": { "speed": 260 },
+      "objectives": [
+        { "type": "CLEAR_COLOR", "color": "BLUE" }
+      ]
+    },
+    {
+      "id": 13,
+      "world": 2,
+      "balls": 11,
+      "crowns": [3, 6],
+      "layout": {
+        "spacing": 83,
+        "pattern": "FULL",
+        "holes": [[0, 0], [4, 0], [4, 1], [5, 0], [5, 1], [5, 2], [6, 1], [6, 2], [4, 3], [4, 4], [5, 3], [5, 4], [5, 5], [6, 4], [6, 5]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 1307,
+        "count": 38,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 3, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SWEET", "row": 8, "col": 4 },
+        { "type": "LINE", "row": 11, "col": 2 },
+        { "type": "LINE", "row": 11, "col": 9 }
+      ],
+      "cup": { "speed": 260 },
+      "objectives": [
+        { "type": "CHAIN", "chain": 3, "count": 1 },
+        { "type": "COLLECT_CANDY", "color": "PINK", "count": 8 }
+      ]
+    },
+    {
+      "id": 14,
+      "world": 2,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 82,
+        "pattern": "CLUSTERS",
+        "holes": [],
+        "clusters": [
+          {
+            "nodes": [[1, 0], [1, 1], [2, 0], [2, 1], [2, 2], [3, 1], [3, 2]]
+          },
+          {
+            "nodes": [[4, 0], [4, 1], [5, 0], [5, 1], [5, 2], [6, 1], [6, 2]]
+          },
+          {
+            "nodes": [[4, 3], [4, 4], [5, 3], [5, 4], [5, 5], [6, 4], [6, 5]]
+          },
+          {
+            "nodes": [[7, 1], [7, 2], [8, 1], [8, 2], [8, 3], [9, 2], [9, 3]]
+          },
+          {
+            "nodes": [[7, 5], [7, 6], [8, 5], [8, 6], [8, 7], [9, 6], [9, 7]]
+          },
+          {
+            "nodes": [[9, 3], [10, 2], [10, 3], [10, 4], [10, 5], [11, 3], [11, 4], [11, 5], [12, 3], [12, 4], [12, 5], [12, 6], [13, 5]]
+          },
+          {
+            "nodes": [[10, 7], [10, 8], [11, 7], [11, 8], [11, 9], [12, 8], [12, 9]]
+          },
+          {
+            "nodes": [[10, 0], [10, 1], [11, 0], [11, 1], [11, 2], [12, 1], [12, 2]]
+          }
+        ],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 1417,
+        "count": 38,
+        "weights": { "GREEN": 1, "PURPLE": 2, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SWEET", "row": 5, "col": 2 },
+        { "type": "BLAST", "row": 8, "col": 6 },
+        { "type": "LINE", "row": 11, "col": 4 }
+      ],
+      "cup": { "speed": 260 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "color": "PURPLE", "count": 9 },
+        { "type": "SCORE", "score": 3500 }
+      ]
+    },
+    {
+      "id": 15,
+      "world": 2,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 81,
+        "pattern": "FULL",
+        "holes": [[0, 0], [6, 0], [6, 1], [7, 0], [7, 1], [7, 2], [8, 1], [8, 2], [6, 5], [6, 6], [7, 5], [7, 6], [7, 7], [8, 6], [8, 7]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 1507,
+        "count": 38,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SPLIT", "row": 4, "col": 2 },
+        { "type": "SPLIT", "row": 9, "col": 3 },
+        { "type": "SPLIT", "row": 9, "col": 6 },
+        { "type": "LINE", "row": 12, "col": 6 }
+      ],
+      "cup": { "speed": 260 },
+      "objectives": [
+        { "type": "COLLECT_GEM", "gem": "SPLIT", "count": 2 }
+      ]
+    },
+    {
+      "id": 16,
+      "world": 2,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 81,
+        "pattern": "CLUSTERS",
+        "holes": [],
+        "clusters": [
+          {
+            "nodes": [[2, 1], [2, 2], [3, 1], [3, 2], [3, 3], [4, 2], [4, 3]]
+          },
+          {
+            "nodes": [[5, 0], [5, 1], [6, 0], [6, 1], [6, 2], [7, 1], [7, 2]]
+          },
+          {
+            "nodes": [[5, 4], [5, 5], [6, 4], [6, 5], [6, 6], [7, 5], [7, 6]]
+          },
+          {
+            "nodes": [[7, 3], [8, 2], [8, 3], [8, 4], [8, 5], [9, 3], [9, 4], [9, 5], [10, 3], [10, 4], [10, 5], [10, 6], [11, 5]]
+          },
+          {
+            "nodes": [[11, 1], [11, 2], [12, 1], [12, 2], [12, 3], [13, 2], [13, 3]]
+          },
+          {
+            "nodes": [[11, 9], [11, 10], [12, 9], [12, 10], [12, 11], [13, 10], [13, 11]]
+          },
+          {
+            "nodes": [[12, 5], [12, 6], [13, 5], [13, 6], [13, 7], [14, 6], [14, 7]]
+          }
+        ],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 1607,
+        "count": 38,
+        "weights": { "GREEN": 0, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": [
+          { "color": "GREEN", "row": 2, "col": 1 },
+          { "color": "GREEN", "row": 5, "col": 5 },
+          { "color": "GREEN", "row": 9, "col": 10 },
+          { "color": "GREEN", "row": 12, "col": 15 }
+        ]
+      },
+      "gems": [
+        { "type": "SPLIT", "row": 9, "col": 4 },
+        { "type": "BLAST", "row": 6, "col": 4 }
+      ],
+      "cup": { "speed": 260 },
+      "objectives": [
+        { "type": "CLEAR_COLOR", "color": "GREEN" },
+        { "type": "CUP", "count": 1 }
+      ]
+    },
+    {
+      "id": 17,
+      "world": 2,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 80,
+        "pattern": "FULL",
+        "holes": [[0, 0], [3, 1], [3, 2], [4, 1], [4, 2], [4, 3], [5, 2], [5, 3], [8, 1], [8, 2], [9, 1], [9, 2], [9, 3], [10, 2], [10, 3], [8, 6], [8, 7], [9, 6], [9, 7], [9, 8], [10, 7], [10, 8]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 1707,
+        "count": 40,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 3 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SPLIT", "row": 6, "col": 4 },
+        { "type": "SWEET", "row": 12, "col": 6 },
+        { "type": "LINE", "row": 7, "col": 2 }
+      ],
+      "cup": { "speed": 260 },
+      "objectives": [
+        { "type": "CHAIN", "chain": 3, "count": 1 },
+        { "type": "SCORE", "score": 7000 }
+      ]
+    },
+    {
+      "id": 18,
+      "world": 2,
+      "balls": 9,
+      "crowns": [2, 5],
+      "layout": {
+        "spacing": 79,
+        "pattern": "CLUSTERS",
+        "holes": [],
+        "clusters": [
+          {
+            "nodes": [[1, 0], [1, 1], [2, 0], [2, 1], [2, 2], [3, 1], [3, 2]]
+          },
+          {
+            "nodes": [[3, 1], [4, 0], [4, 1], [4, 2], [4, 3], [5, 1], [5, 2], [5, 3], [6, 1], [6, 2], [6, 3], [6, 4], [7, 3]]
+          },
+          {
+            "nodes": [[7, 0], [7, 1], [8, 0], [8, 1], [8, 2], [9, 1], [9, 2]]
+          },
+          {
+            "nodes": [[7, 6], [7, 7], [8, 6], [8, 7], [8, 8], [9, 7], [9, 8]]
+          },
+          {
+            "nodes": [[8, 3], [9, 2], [9, 3], [9, 4], [9, 5], [10, 3], [10, 4], [10, 5], [11, 3], [11, 4], [11, 5], [11, 6], [12, 5]]
+          },
+          {
+            "nodes": [[12, 2], [12, 3], [13, 2], [13, 3], [13, 4], [14, 3], [14, 4]]
+          },
+          {
+            "nodes": [[12, 9], [12, 10], [13, 9], [13, 10], [13, 11], [14, 10], [14, 11]]
+          }
+        ],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 1807,
+        "count": 40,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 0, "BLUE": 2 },
+        "fixed": [
+          { "color": "PINK", "row": 2, "col": 1 },
+          { "color": "PINK", "row": 5, "col": 6 },
+          { "color": "PINK", "row": 7, "col": 5 },
+          { "color": "PINK", "row": 10, "col": 13 },
+          { "color": "PINK", "row": 12, "col": 9 }
+        ]
+      },
+      "gems": [
+        { "type": "BLAST", "row": 5, "col": 2 },
+        { "type": "SPLIT", "row": 10, "col": 4 },
+        { "type": "LINE", "row": 13, "col": 10 }
+      ],
+      "cup": { "speed": 260 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "color": "BLUE", "count": 11 },
+        { "type": "CLEAR_COLOR", "color": "PINK" }
+      ]
+    },
+    {
+      "id": 19,
+      "world": 2,
+      "balls": 9,
+      "crowns": [2, 5],
+      "layout": {
+        "spacing": 79,
+        "pattern": "FULL",
+        "holes": [[0, 0], [4, 2], [5, 1], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [6, 4], [7, 2], [7, 3], [7, 4], [7, 5], [8, 4], [10, 1], [10, 2], [11, 1], [11, 2], [11, 3], [12, 2], [12, 3], [10, 8], [10, 9], [11, 8], [11, 9], [11, 10], [12, 9], [12, 10]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 1907,
+        "count": 42,
+        "weights": { "GREEN": 1, "PURPLE": 3, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SWEET", "row": 3, "col": 1 },
+        { "type": "SPLIT", "row": 9, "col": 7 },
+        { "type": "BLAST", "row": 9, "col": 2 },
+        { "type": "LINE", "row": 13, "col": 6 }
+      ],
+      "cup": { "speed": 260 },
+      "objectives": [
+        { "type": "CHAIN", "chain": 3, "count": 1 },
+        { "type": "COLLECT_CANDY", "count": 23 }
+      ]
+    },
+    {
+      "id": 20,
+      "world": 2,
+      "balls": 9,
+      "crowns": [2, 5],
+      "layout": {
+        "spacing": 78,
+        "pattern": "CLUSTERS",
+        "holes": [],
+        "clusters": [
+          {
+            "nodes": [[2, 0], [2, 1], [3, 0], [3, 1], [3, 2], [4, 1], [4, 2]]
+          },
+          {
+            "nodes": [[2, 1], [2, 2], [3, 1], [3, 2], [3, 3], [4, 2], [4, 3]]
+          },
+          {
+            "nodes": [[4, 2], [5, 1], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [6, 4], [7, 2], [7, 3], [7, 4], [7, 5], [8, 4]]
+          },
+          {
+            "nodes": [[8, 0], [8, 1], [9, 0], [9, 1], [9, 2], [10, 1], [10, 2]]
+          },
+          {
+            "nodes": [[8, 7], [8, 8], [9, 7], [9, 8], [9, 9], [10, 8], [10, 9]]
+          },
+          {
+            "nodes": [[9, 4], [10, 3], [10, 4], [10, 5], [10, 6], [11, 4], [11, 5], [11, 6], [12, 4], [12, 5], [12, 6], [12, 7], [13, 6]]
+          },
+          {
+            "nodes": [[13, 2], [13, 3], [14, 2], [14, 3], [14, 4], [15, 3], [15, 4]]
+          },
+          {
+            "nodes": [[13, 10], [13, 11], [14, 10], [14, 11], [14, 12], [15, 11], [15, 12]]
+          }
+        ],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 2007,
+        "count": 42,
+        "weights": { "GREEN": 2, "PURPLE": 0, "PINK": 1, "BLUE": 2 },
+        "fixed": [
+          { "color": "PURPLE", "row": 2, "col": 1 },
+          { "color": "PURPLE", "row": 5, "col": 3 },
+          { "color": "PURPLE", "row": 8, "col": 6 },
+          { "color": "PURPLE", "row": 10, "col": 13 },
+          { "color": "PURPLE", "row": 13, "col": 10 }
+        ]
+      },
+      "gems": [
+        { "type": "SPLIT", "row": 6, "col": 3 },
+        { "type": "LINE", "row": 11, "col": 5 },
+        { "type": "BLAST", "row": 9, "col": 7 }
+      ],
+      "cup": { "speed": 260 },
+      "objectives": [
+        { "type": "CLEAR_COLOR", "color": "PURPLE" },
+        { "type": "CHAIN", "chain": 3, "count": 1 },
+        { "type": "SCORE", "score": 4000 }
+      ]
+    },
+    {
+      "id": 21,
+      "world": 3,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 78,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 9, "amplitude": 30, "periodSeconds": 3.5 }
+        ]
+      },
+      "candies": {
+        "seed": 2107,
+        "count": 40,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "EXTRA_BALL", "row": 4, "col": 2 },
+        { "type": "EXTRA_BALL", "row": 6, "col": 2 },
+        { "type": "EXTRA_BALL", "row": 6, "col": 4 },
+        { "type": "SWEET", "row": 12, "col": 6 }
+      ],
+      "cup": { "speed": 320 },
+      "objectives": [
+        { "type": "COLLECT_GEM", "gem": "EXTRA_BALL", "count": 2 }
+      ]
+    },
+    {
+      "id": 22,
+      "world": 3,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 77,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 7, "amplitude": 35, "periodSeconds": 3.5 }
+        ]
+      },
+      "candies": {
+        "seed": 2207,
+        "count": 42,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 2, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SPLIT", "row": 4, "col": 2 },
+        { "type": "EXTRA_BALL", "row": 10, "col": 5 },
+        { "type": "LINE", "row": 12, "col": 3 }
+      ],
+      "cup": { "speed": 320 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "color": "PINK", "count": 11 },
+        { "type": "CUP", "count": 2 }
+      ]
+    },
+    {
+      "id": 23,
+      "world": 3,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 77,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 6, "amplitude": 35, "periodSeconds": 3.0 },
+          { "row": 11, "amplitude": 40, "periodSeconds": 3.5 }
+        ]
+      },
+      "candies": {
+        "seed": 2307,
+        "count": 42,
+        "weights": { "GREEN": 2, "PURPLE": 1, "PINK": 2, "BLUE": 0 },
+        "fixed": [
+          { "color": "BLUE", "row": 2, "col": 1 },
+          { "color": "BLUE", "row": 4, "col": 2 },
+          { "color": "BLUE", "row": 6, "col": 4 },
+          { "color": "BLUE", "row": 9, "col": 11 },
+          { "color": "BLUE", "row": 11, "col": 8 },
+          { "color": "BLUE", "row": 13, "col": 16 }
+        ]
+      },
+      "gems": [
+        { "type": "BLAST", "row": 4, "col": 2 },
+        { "type": "EXTRA_BALL", "row": 8, "col": 4 },
+        { "type": "LINE", "row": 14, "col": 7 }
+      ],
+      "cup": { "speed": 320 },
+      "objectives": [
+        { "type": "CLEAR_COLOR", "color": "BLUE" },
+        { "type": "SCORE", "score": 8000 }
+      ]
+    },
+    {
+      "id": 24,
+      "world": 3,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 76,
+        "pattern": "FULL",
+        "holes": [[0, 0], [3, 1], [3, 2], [4, 1], [4, 2], [4, 3], [5, 2], [5, 3]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 8, "amplitude": 40, "periodSeconds": 3.0 }
+        ]
+      },
+      "candies": {
+        "seed": 2407,
+        "count": 44,
+        "weights": { "GREEN": 3, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SPLIT", "row": 6, "col": 2 },
+        { "type": "SPLIT", "row": 6, "col": 4 },
+        { "type": "EXTRA_BALL", "row": 11, "col": 5 },
+        { "type": "SWEET", "row": 13, "col": 10 }
+      ],
+      "cup": { "speed": 320 },
+      "objectives": [
+        { "type": "CHAIN", "chain": 3, "count": 2 },
+        { "type": "COLLECT_CANDY", "color": "GREEN", "count": 13 }
+      ]
+    },
+    {
+      "id": 25,
+      "world": 3,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 75,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 9, "amplitude": 40, "periodSeconds": 3.0 }
+        ]
+      },
+      "candies": {
+        "seed": 2507,
+        "count": 44,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "MAGNET", "row": 4, "col": 2 },
+        { "type": "MAGNET", "row": 6, "col": 2 },
+        { "type": "MAGNET", "row": 6, "col": 4 },
+        { "type": "EXTRA_BALL", "row": 12, "col": 6 }
+      ],
+      "cup": { "speed": 320 },
+      "objectives": [
+        { "type": "COLLECT_GEM", "gem": "MAGNET", "count": 2 }
+      ]
+    },
+    {
+      "id": 26,
+      "world": 3,
+      "balls": 9,
+      "crowns": [2, 5],
+      "layout": {
+        "spacing": 75,
+        "pattern": "CLUSTERS",
+        "holes": [],
+        "clusters": [
+          {
+            "nodes": [[2, 0], [2, 1], [3, 0], [3, 1], [3, 2], [4, 1], [4, 2]]
+          },
+          {
+            "nodes": [[3, 1], [4, 0], [4, 1], [4, 2], [4, 3], [5, 1], [5, 2], [5, 3], [6, 1], [6, 2], [6, 3], [6, 4], [7, 3]]
+          },
+          {
+            "nodes": [[7, 0], [7, 1], [8, 0], [8, 1], [8, 2], [9, 1], [9, 2]]
+          },
+          {
+            "nodes": [[7, 6], [7, 7], [8, 6], [8, 7], [8, 8], [9, 7], [9, 8]]
+          },
+          {
+            "nodes": [[8, 3], [9, 2], [9, 3], [9, 4], [9, 5], [10, 3], [10, 4], [10, 5], [11, 3], [11, 4], [11, 5], [11, 6], [12, 5]]
+          },
+          {
+            "nodes": [[11, 2], [12, 1], [12, 2], [12, 3], [12, 4], [13, 2], [13, 3], [13, 4], [14, 2], [14, 3], [14, 4], [14, 5], [15, 4]]
+          },
+          {
+            "nodes": [[11, 9], [12, 8], [12, 9], [12, 10], [12, 11], [13, 9], [13, 10], [13, 11], [14, 9], [14, 10], [14, 11], [14, 12], [15, 11]]
+          }
+        ],
+        "movingRows": [
+          { "row": 8, "amplitude": 35, "periodSeconds": 3.5 }
+        ]
+      },
+      "candies": {
+        "seed": 2607,
+        "count": 44,
+        "weights": { "GREEN": 0, "PURPLE": 2, "PINK": 1, "BLUE": 1 },
+        "fixed": [
+          { "color": "GREEN", "row": 2, "col": 1 },
+          { "color": "GREEN", "row": 4, "col": 5 },
+          { "color": "GREEN", "row": 6, "col": 4 },
+          { "color": "GREEN", "row": 9, "col": 11 },
+          { "color": "GREEN", "row": 11, "col": 8 },
+          { "color": "GREEN", "row": 13, "col": 16 }
+        ]
+      },
+      "gems": [
+        { "type": "MAGNET", "row": 5, "col": 2 },
+        { "type": "SPLIT", "row": 10, "col": 4 },
+        { "type": "BLAST", "row": 13, "col": 10 }
+      ],
+      "cup": { "speed": 320 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "color": "PURPLE", "count": 15 },
+        { "type": "CLEAR_COLOR", "color": "GREEN" }
+      ]
+    },
+    {
+      "id": 27,
+      "world": 3,
+      "balls": 9,
+      "crowns": [2, 5],
+      "layout": {
+        "spacing": 74,
+        "pattern": "FULL",
+        "holes": [[0, 0], [4, 1], [4, 2], [5, 1], [5, 2], [5, 3], [6, 2], [6, 3], [9, 4], [9, 5], [10, 4], [10, 5], [10, 6], [11, 5], [11, 6]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 7, "amplitude": 45, "periodSeconds": 3.0 },
+          { "row": 12, "amplitude": 40, "periodSeconds": 4.0 }
+        ]
+      },
+      "candies": {
+        "seed": 2707,
+        "count": 46,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "MAGNET", "row": 3, "col": 1 },
+        { "type": "EXTRA_BALL", "row": 9, "col": 2 },
+        { "type": "LINE", "row": 9, "col": 7 },
+        { "type": "SPLIT", "row": 14, "col": 7 }
+      ],
+      "cup": { "speed": 320 },
+      "objectives": [
+        { "type": "SCORE", "score": 15000 },
+        { "type": "CUP", "count": 2 }
+      ]
+    },
+    {
+      "id": 28,
+      "world": 3,
+      "balls": 9,
+      "crowns": [2, 5],
+      "layout": {
+        "spacing": 73,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 5, "amplitude": 30, "periodSeconds": 2.5 },
+          { "row": 10, "amplitude": 45, "periodSeconds": 3.5 }
+        ]
+      },
+      "candies": {
+        "seed": 2807,
+        "count": 46,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 3 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SPLIT", "row": 7, "col": 2 },
+        { "type": "MAGNET", "row": 7, "col": 5 },
+        { "type": "BLAST", "row": 13, "col": 6 }
+      ],
+      "cup": { "speed": 320 },
+      "objectives": [
+        { "type": "CHAIN", "chain": 3, "count": 2 },
+        { "type": "COLLECT_CANDY", "color": "BLUE", "count": 14 }
+      ]
+    },
+    {
+      "id": 29,
+      "world": 3,
+      "balls": 9,
+      "crowns": [2, 5],
+      "layout": {
+        "spacing": 73,
+        "pattern": "FULL",
+        "holes": [[0, 0], [4, 2], [5, 1], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [6, 4], [7, 2], [7, 3], [7, 4], [7, 5], [8, 4]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 9, "amplitude": 45, "periodSeconds": 3.0 },
+          { "row": 13, "amplitude": 50, "periodSeconds": 3.5 }
+        ]
+      },
+      "candies": {
+        "seed": 2907,
+        "count": 48,
+        "weights": { "GREEN": 2, "PURPLE": 2, "PINK": 0, "BLUE": 1 },
+        "fixed": [
+          { "color": "PINK", "row": 2, "col": 3 },
+          { "color": "PINK", "row": 4, "col": 5 },
+          { "color": "PINK", "row": 6, "col": 4 },
+          { "color": "PINK", "row": 8, "col": 10 },
+          { "color": "PINK", "row": 10, "col": 7 },
+          { "color": "PINK", "row": 12, "col": 15 },
+          { "color": "PINK", "row": 14, "col": 13 }
+        ]
+      },
+      "gems": [
+        { "type": "MAGNET", "row": 3, "col": 1 },
+        { "type": "BLAST", "row": 11, "col": 3 },
+        { "type": "EXTRA_BALL", "row": 11, "col": 8 },
+        { "type": "SPLIT", "row": 15, "col": 6 }
+      ],
+      "cup": { "speed": 320 },
+      "objectives": [
+        { "type": "CLEAR_COLOR", "color": "PINK" },
+        { "type": "COLLECT_GEM", "count": 2 }
+      ]
+    },
+    {
+      "id": 30,
+      "world": 3,
+      "balls": 9,
+      "crowns": [2, 5],
+      "layout": {
+        "spacing": 72,
+        "pattern": "CLUSTERS",
+        "holes": [],
+        "clusters": [
+          {
+            "nodes": [[1, 0], [1, 1], [2, 0], [2, 1], [2, 2], [3, 1], [3, 2]]
+          },
+          {
+            "nodes": [[2, 1], [3, 0], [3, 1], [3, 2], [3, 3], [4, 1], [4, 2], [4, 3], [5, 1], [5, 2], [5, 3], [5, 4], [6, 3]]
+          },
+          {
+            "nodes": [[6, 0], [6, 1], [7, 0], [7, 1], [7, 2], [8, 1], [8, 2]]
+          },
+          {
+            "nodes": [[6, 5], [6, 6], [7, 5], [7, 6], [7, 7], [8, 6], [8, 7]]
+          },
+          {
+            "nodes": [[8, 3], [8, 4], [8, 5], [9, 3], [9, 4], [9, 5], [9, 6], [10, 3], [10, 4], [10, 5], [10, 6], [10, 7], [11, 4], [11, 5], [11, 6], [11, 7], [12, 5], [12, 6], [12, 7]]
+          },
+          {
+            "nodes": [[12, 1], [12, 2], [13, 1], [13, 2], [13, 3], [14, 2], [14, 3]]
+          },
+          {
+            "nodes": [[12, 10], [12, 11], [13, 10], [13, 11], [13, 12], [14, 11], [14, 12]]
+          },
+          {
+            "nodes": [[13, 6], [14, 5], [14, 6], [14, 7], [14, 8], [15, 6], [15, 7], [15, 8], [16, 6], [16, 7], [16, 8], [16, 9]]
+          }
+        ],
+        "movingRows": [
+          { "row": 7, "amplitude": 40, "periodSeconds": 3.0 }
+        ]
+      },
+      "candies": {
+        "seed": 3007,
+        "count": 50,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 2, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "MAGNET", "row": 4, "col": 2 },
+        { "type": "SPLIT", "row": 10, "col": 5 },
+        { "type": "EXTRA_BALL", "row": 13, "col": 3 },
+        { "type": "LINE", "row": 15, "col": 7 }
+      ],
+      "cup": { "speed": 320 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "count": 28 },
+        { "type": "CHAIN", "chain": 3, "count": 1 },
+        { "type": "SCORE", "score": 11000 }
+      ]
+    },
+    {
+      "id": 31,
+      "world": 4,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 72,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 12, "amplitude": 40, "periodSeconds": 3.5 }
+        ]
+      },
+      "candies": {
+        "seed": 3107,
+        "count": 48,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SUGAR_STORM", "row": 6, "col": 3 },
+        { "type": "SWEET", "row": 3, "col": 1 },
+        { "type": "BLAST", "row": 9, "col": 2 },
+        { "type": "BLAST", "row": 9, "col": 7 }
+      ],
+      "cup": { "speed": 380 },
+      "objectives": [
+        { "type": "COLLECT_GEM", "gem": "SUGAR_STORM", "count": 1 },
+        { "type": "COLLECT_CANDY", "count": 24 }
+      ]
+    },
+    {
+      "id": 32,
+      "world": 4,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 71,
+        "pattern": "FULL",
+        "holes": [[0, 0], [7, 3], [7, 4], [8, 3], [8, 4], [8, 5], [9, 4], [9, 5]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 5, "amplitude": 35, "periodSeconds": 3.0 },
+          { "row": 13, "amplitude": 45, "periodSeconds": 3.5 }
+        ]
+      },
+      "candies": {
+        "seed": 3207,
+        "count": 50,
+        "weights": { "GREEN": 1, "PURPLE": 2, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SUGAR_STORM", "row": 10, "col": 7 },
+        { "type": "LINE", "row": 10, "col": 2 },
+        { "type": "SPLIT", "row": 3, "col": 2 }
+      ],
+      "cup": { "speed": 380 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "color": "PURPLE", "count": 12 },
+        { "type": "CUP", "count": 2 }
+      ]
+    },
+    {
+      "id": 33,
+      "world": 4,
+      "balls": 10,
+      "crowns": [3, 5],
+      "layout": {
+        "spacing": 71,
+        "pattern": "CLUSTERS",
+        "holes": [],
+        "clusters": [
+          {
+            "nodes": [[2, 0], [2, 1], [3, 0], [3, 1], [3, 2], [4, 1], [4, 2]]
+          },
+          {
+            "nodes": [[3, 2], [4, 1], [4, 2], [4, 3], [4, 4], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [6, 4], [6, 5], [7, 4]]
+          },
+          {
+            "nodes": [[7, 0], [7, 1], [8, 0], [8, 1], [8, 2], [9, 1], [9, 2]]
+          },
+          {
+            "nodes": [[7, 6], [7, 7], [8, 6], [8, 7], [8, 8], [9, 7], [9, 8]]
+          },
+          {
+            "nodes": [[9, 3], [9, 4], [9, 5], [10, 3], [10, 4], [10, 5], [10, 6], [11, 3], [11, 4], [11, 5], [11, 6], [11, 7], [12, 4], [12, 5], [12, 6], [12, 7], [13, 5], [13, 6], [13, 7]]
+          },
+          {
+            "nodes": [[13, 1], [13, 2], [14, 1], [14, 2], [14, 3], [15, 2], [15, 3]]
+          },
+          {
+            "nodes": [[13, 11], [13, 12], [14, 11], [14, 12], [14, 13], [15, 12], [15, 13]]
+          },
+          {
+            "nodes": [[14, 7], [15, 6], [15, 7], [15, 8], [15, 9], [16, 7], [16, 8], [16, 9]]
+          }
+        ],
+        "movingRows": [
+          { "row": 8, "amplitude": 40, "periodSeconds": 3.0 }
+        ]
+      },
+      "candies": {
+        "seed": 3307,
+        "count": 50,
+        "weights": { "GREEN": 2, "PURPLE": 1, "PINK": 0, "BLUE": 2 },
+        "fixed": [
+          { "color": "PINK", "row": 2, "col": 1 },
+          { "color": "PINK", "row": 4, "col": 3 },
+          { "color": "PINK", "row": 6, "col": 4 },
+          { "color": "PINK", "row": 8, "col": 10 },
+          { "color": "PINK", "row": 10, "col": 7 },
+          { "color": "PINK", "row": 12, "col": 15 },
+          { "color": "PINK", "row": 14, "col": 10 }
+        ]
+      },
+      "gems": [
+        { "type": "SUGAR_STORM", "row": 11, "col": 5 },
+        { "type": "MAGNET", "row": 5, "col": 3 },
+        { "type": "EXTRA_BALL", "row": 14, "col": 11 }
+      ],
+      "cup": { "speed": 380 },
+      "objectives": [
+        { "type": "CLEAR_COLOR", "color": "PINK" },
+        { "type": "SCORE", "score": 25000 }
+      ]
+    },
+    {
+      "id": 34,
+      "world": 4,
+      "balls": 9,
+      "crowns": [2, 5],
+      "layout": {
+        "spacing": 70,
+        "pattern": "FULL",
+        "holes": [[0, 0], [3, 1], [3, 2], [4, 1], [4, 2], [4, 3], [5, 2], [5, 3], [12, 2], [12, 3], [13, 2], [13, 3], [13, 4], [14, 3], [14, 4], [12, 9], [12, 10], [13, 9], [13, 10], [13, 11], [14, 10], [14, 11]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 7, "amplitude": 45, "periodSeconds": 3.0 },
+          { "row": 10, "amplitude": 40, "periodSeconds": 2.5 }
+        ]
+      },
+      "candies": {
+        "seed": 3407,
+        "count": 52,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 5, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SPLIT", "row": 2, "col": 1 },
+        { "type": "BLAST", "row": 13, "col": 6 },
+        { "type": "MAGNET", "row": 15, "col": 9 }
+      ],
+      "cup": { "speed": 380 },
+      "objectives": [
+        { "type": "CHAIN", "chain": 4, "count": 1 },
+        { "type": "COLLECT_CANDY", "color": "PINK", "count": 22 }
+      ]
+    },
+    {
+      "id": 35,
+      "world": 4,
+      "balls": 9,
+      "crowns": [2, 5],
+      "layout": {
+        "spacing": 69,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 6, "amplitude": 40, "periodSeconds": 3.0 },
+          { "row": 11, "amplitude": 45, "periodSeconds": 3.5 }
+        ]
+      },
+      "candies": {
+        "seed": 3507,
+        "count": 52,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SUGAR_STORM", "row": 8, "col": 4 },
+        { "type": "EXTRA_BALL", "row": 3, "col": 1 },
+        { "type": "LINE", "row": 13, "col": 3 },
+        { "type": "LINE", "row": 13, "col": 10 },
+        { "type": "SWEET", "row": 15, "col": 7 }
+      ],
+      "cup": { "speed": 380 },
+      "objectives": [
+        { "type": "SCORE", "score": 30000 },
+        { "type": "COLLECT_GEM", "count": 3 }
+      ]
+    },
+    {
+      "id": 36,
+      "world": 4,
+      "balls": 9,
+      "crowns": [2, 5],
+      "layout": {
+        "spacing": 69,
+        "pattern": "CLUSTERS",
+        "holes": [],
+        "clusters": [
+          {
+            "nodes": [[1, 0], [1, 1], [2, 0], [2, 1], [2, 2], [3, 1], [3, 2]]
+          },
+          {
+            "nodes": [[4, 0], [4, 1], [5, 0], [5, 1], [5, 2], [6, 1], [6, 2]]
+          },
+          {
+            "nodes": [[4, 3], [4, 4], [5, 3], [5, 4], [5, 5], [6, 4], [6, 5]]
+          },
+          {
+            "nodes": [[6, 1], [6, 2], [6, 3], [7, 1], [7, 2], [7, 3], [7, 4], [8, 1], [8, 2], [8, 3], [8, 4], [8, 5], [9, 2], [9, 3], [9, 4], [9, 5], [10, 3], [10, 4], [10, 5]]
+          },
+          {
+            "nodes": [[10, 0], [10, 1], [11, 0], [11, 1], [11, 2], [12, 1], [12, 2]]
+          },
+          {
+            "nodes": [[10, 9], [10, 10], [11, 9], [11, 10], [11, 11], [12, 10], [12, 11]]
+          },
+          {
+            "nodes": [[11, 4], [11, 5], [11, 6], [12, 4], [12, 5], [12, 6], [12, 7], [13, 4], [13, 5], [13, 6], [13, 7], [13, 8], [14, 5], [14, 6], [14, 7], [14, 8], [15, 6], [15, 7], [15, 8]]
+          },
+          {
+            "nodes": [[15, 2], [15, 3], [16, 2], [16, 3], [16, 4], [17, 3], [17, 4]]
+          },
+          {
+            "nodes": [[15, 12], [15, 13], [16, 12], [16, 13], [16, 14], [17, 13], [17, 14]]
+          }
+        ],
+        "movingRows": [
+          { "row": 11, "amplitude": 45, "periodSeconds": 3.5 }
+        ]
+      },
+      "candies": {
+        "seed": 3607,
+        "count": 54,
+        "weights": { "GREEN": 0, "PURPLE": 2, "PINK": 1, "BLUE": 2 },
+        "fixed": [
+          { "color": "GREEN", "row": 2, "col": 1 },
+          { "color": "GREEN", "row": 4, "col": 3 },
+          { "color": "GREEN", "row": 6, "col": 4 },
+          { "color": "GREEN", "row": 8, "col": 10 },
+          { "color": "GREEN", "row": 9, "col": 7 },
+          { "color": "GREEN", "row": 11, "col": 14 },
+          { "color": "GREEN", "row": 13, "col": 10 },
+          { "color": "GREEN", "row": 15, "col": 19 }
+        ]
+      },
+      "gems": [
+        { "type": "MAGNET", "row": 8, "col": 3 },
+        { "type": "SPLIT", "row": 13, "col": 6 },
+        { "type": "BLAST", "row": 5, "col": 3 }
+      ],
+      "cup": { "speed": 380 },
+      "objectives": [
+        { "type": "CLEAR_COLOR", "color": "GREEN" },
+        { "type": "CUP", "count": 2 }
+      ]
+    },
+    {
+      "id": 37,
+      "world": 4,
+      "balls": 9,
+      "crowns": [2, 5],
+      "layout": {
+        "spacing": 68,
+        "pattern": "FULL",
+        "holes": [[0, 0], [4, 2], [5, 1], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [6, 4], [7, 2], [7, 3], [7, 4], [7, 5], [8, 4], [12, 5], [12, 6], [13, 5], [13, 6], [13, 7], [14, 6], [14, 7]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 9, "amplitude": 45, "periodSeconds": 3.0 },
+          { "row": 15, "amplitude": 50, "periodSeconds": 4.0 }
+        ]
+      },
+      "candies": {
+        "seed": 3707,
+        "count": 54,
+        "weights": { "GREEN": 1, "PURPLE": 1, "PINK": 1, "BLUE": 3 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SUGAR_STORM", "row": 11, "col": 3 },
+        { "type": "SPLIT", "row": 3, "col": 1 },
+        { "type": "EXTRA_BALL", "row": 11, "col": 8 }
+      ],
+      "cup": { "speed": 380 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "color": "BLUE", "count": 16 },
+        { "type": "SCORE", "score": 40000 }
+      ]
+    },
+    {
+      "id": 38,
+      "world": 4,
+      "balls": 8,
+      "crowns": [2, 4],
+      "layout": {
+        "spacing": 67,
+        "pattern": "FULL",
+        "holes": [[0, 0], [3, 1], [3, 2], [4, 1], [4, 2], [4, 3], [5, 2], [5, 3], [13, 6], [13, 7], [14, 6], [14, 7], [14, 8], [15, 7], [15, 8]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 6, "amplitude": 40, "periodSeconds": 2.5 },
+          { "row": 10, "amplitude": 45, "periodSeconds": 3.0 },
+          { "row": 16, "amplitude": 50, "periodSeconds": 3.5 }
+        ]
+      },
+      "candies": {
+        "seed": 3807,
+        "count": 56,
+        "weights": { "GREEN": 5, "PURPLE": 1, "PINK": 1, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "MAGNET", "row": 8, "col": 4 },
+        { "type": "SPLIT", "row": 13, "col": 3 },
+        { "type": "BLAST", "row": 13, "col": 10 }
+      ],
+      "cup": { "speed": 380 },
+      "objectives": [
+        { "type": "CHAIN", "chain": 4, "count": 1 },
+        { "type": "COLLECT_CANDY", "color": "GREEN", "count": 20 }
+      ]
+    },
+    {
+      "id": 39,
+      "world": 4,
+      "balls": 8,
+      "crowns": [2, 4],
+      "layout": {
+        "spacing": 67,
+        "pattern": "CLUSTERS",
+        "holes": [],
+        "clusters": [
+          {
+            "nodes": [[2, 0], [2, 1], [3, 0], [3, 1], [3, 2], [4, 1], [4, 2]]
+          },
+          {
+            "nodes": [[3, 1], [4, 0], [4, 1], [4, 2], [4, 3], [5, 1], [5, 2], [5, 3], [6, 1], [6, 2], [6, 3], [6, 4], [7, 3]]
+          },
+          {
+            "nodes": [[6, 5], [6, 6], [7, 5], [7, 6], [7, 7], [8, 6], [8, 7]]
+          },
+          {
+            "nodes": [[7, 1], [7, 2], [7, 3], [8, 1], [8, 2], [8, 3], [8, 4], [9, 1], [9, 2], [9, 3], [9, 4], [9, 5], [10, 2], [10, 3], [10, 4], [10, 5], [11, 3], [11, 4], [11, 5]]
+          },
+          {
+            "nodes": [[10, 8], [11, 7], [11, 8], [11, 9], [11, 10], [12, 8], [12, 9], [12, 10], [13, 8], [13, 9], [13, 10], [13, 11], [14, 10]]
+          },
+          {
+            "nodes": [[12, 3], [13, 2], [13, 3], [13, 4], [13, 5], [14, 3], [14, 4], [14, 5], [15, 3], [15, 4], [15, 5], [15, 6], [16, 5]]
+          },
+          {
+            "nodes": [[15, 9], [15, 10], [16, 9], [16, 10], [16, 11], [17, 10], [17, 11]]
+          },
+          {
+            "nodes": [[16, 13], [16, 14], [17, 13], [17, 14], [17, 15]]
+          }
+        ],
+        "movingRows": [
+          { "row": 12, "amplitude": 45, "periodSeconds": 3.0 }
+        ]
+      },
+      "candies": {
+        "seed": 3907,
+        "count": 56,
+        "weights": { "GREEN": 2, "PURPLE": 2, "PINK": 2, "BLUE": 0 },
+        "fixed": [
+          { "color": "BLUE", "row": 2, "col": 1 },
+          { "color": "BLUE", "row": 4, "col": 5 },
+          { "color": "BLUE", "row": 6, "col": 4 },
+          { "color": "BLUE", "row": 8, "col": 10 },
+          { "color": "BLUE", "row": 9, "col": 8 },
+          { "color": "BLUE", "row": 11, "col": 14 },
+          { "color": "BLUE", "row": 13, "col": 10 },
+          { "color": "BLUE", "row": 15, "col": 19 }
+        ]
+      },
+      "gems": [
+        { "type": "SUGAR_STORM", "row": 9, "col": 3 },
+        { "type": "MAGNET", "row": 5, "col": 2 },
+        { "type": "EXTRA_BALL", "row": 14, "col": 4 }
+      ],
+      "cup": { "speed": 380 },
+      "objectives": [
+        { "type": "CLEAR_COLOR", "color": "BLUE" },
+        { "type": "COLLECT_GEM", "count": 2 }
+      ]
+    },
+    {
+      "id": 40,
+      "world": 4,
+      "balls": 8,
+      "crowns": [2, 4],
+      "layout": {
+        "spacing": 66,
+        "pattern": "FULL",
+        "holes": [[0, 0], [4, 1], [4, 2], [5, 1], [5, 2], [5, 3], [6, 2], [6, 3], [8, 5], [8, 6], [9, 5], [9, 6], [9, 7], [10, 6], [10, 7]],
+        "clusters": [],
+        "movingRows": [
+          { "row": 7, "amplitude": 45, "periodSeconds": 3.0 },
+          { "row": 12, "amplitude": 50, "periodSeconds": 2.5 },
+          { "row": 16, "amplitude": 50, "periodSeconds": 3.5 }
+        ]
+      },
+      "candies": {
+        "seed": 4007,
+        "count": 58,
+        "weights": { "GREEN": 1, "PURPLE": 2, "PINK": 2, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SUGAR_STORM", "row": 10, "col": 3 },
+        { "type": "MAGNET", "row": 14, "col": 8 },
+        { "type": "SPLIT", "row": 3, "col": 1 },
+        { "type": "LINE", "row": 14, "col": 4 }
+      ],
+      "cup": { "speed": 380 },
+      "objectives": [
+        { "type": "COLLECT_CANDY", "color": "PINK", "count": 14 },
+        { "type": "SCORE", "score": 50000 }
+      ]
+    },
+    {
+      "id": 101,
+      "code": "B1",
+      "world": 0,
+      "balls": 15,
+      "crowns": [4, 8],
+      "layout": {
+        "spacing": 80,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 10107,
+        "count": 64,
+        "weights": { "GREEN": 1, "PURPLE": 0, "PINK": 0, "BLUE": 0 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SWEET", "row": 5, "col": 2 },
+        { "type": "BLAST", "row": 9, "col": 3 },
+        { "type": "SWEET", "row": 9, "col": 6 }
+      ],
+      "cup": { "speed": 260 },
+      "objectives": [
+        { "type": "SCORE", "score": 6500 }
+      ]
+    },
+    {
+      "id": 102,
+      "code": "B2",
+      "world": 0,
+      "balls": 15,
+      "crowns": [4, 8],
+      "layout": {
+        "spacing": 78,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 10207,
+        "count": 68,
+        "weights": { "GREEN": 0, "PURPLE": 1, "PINK": 0, "BLUE": 0 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "BLAST", "row": 5, "col": 3 },
+        { "type": "SWEET", "row": 9, "col": 2 },
+        { "type": "BLAST", "row": 9, "col": 7 }
+      ],
+      "cup": { "speed": 260 },
+      "objectives": [
+        { "type": "SCORE", "score": 7000 }
+      ]
+    },
+    {
+      "id": 103,
+      "code": "B3",
+      "world": 0,
+      "balls": 15,
+      "crowns": [4, 8],
+      "layout": {
+        "spacing": 76,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 10307,
+        "count": 72,
+        "weights": { "GREEN": 0, "PURPLE": 0, "PINK": 1, "BLUE": 0 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "SWEET", "row": 4, "col": 2 },
+        { "type": "BLAST", "row": 8, "col": 4 },
+        { "type": "SWEET", "row": 12, "col": 3 },
+        { "type": "SWEET", "row": 12, "col": 9 }
+      ],
+      "cup": { "speed": 260 },
+      "objectives": [
+        { "type": "SCORE", "score": 7500 }
+      ]
+    },
+    {
+      "id": 104,
+      "code": "B4",
+      "world": 0,
+      "balls": 15,
+      "crowns": [4, 8],
+      "layout": {
+        "spacing": 74,
+        "pattern": "FULL",
+        "holes": [[0, 0]],
+        "clusters": [],
+        "movingRows": []
+      },
+      "candies": {
+        "seed": 10407,
+        "count": 76,
+        "weights": { "GREEN": 0, "PURPLE": 0, "PINK": 0, "BLUE": 1 },
+        "fixed": []
+      },
+      "gems": [
+        { "type": "BLAST", "row": 4, "col": 2 },
+        { "type": "SWEET", "row": 8, "col": 2 },
+        { "type": "BLAST", "row": 8, "col": 6 },
+        { "type": "SWEET", "row": 12, "col": 6 }
+      ],
+      "cup": { "speed": 260 },
+      "objectives": [
+        { "type": "SCORE", "score": 8000 }
+      ]
+    }
+  ]
+}

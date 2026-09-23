@@ -251,8 +251,10 @@ data class FixedCandy(
 /**
  * A gem replacing a peg at a lattice node (§4.2): `{ "type": "BLAST", "row": 6, "col": 4 }`.
  *
- * `LayoutBuilder` removes pegs adjacent to a gem when `d < 73` per §3.4, so authors do not need to
- * carve holes around one by hand.
+ * `LayoutBuilder` removes any peg whose surface gap to a gem is under `2·ballRadius + 4` (36 u),
+ * across a moving peg's whole swing — §3.4's "d < 73" rule generalised to every `d` — so authors do
+ * not need to carve holes around one by hand. The gem itself is placed even on a hole or outside
+ * every cluster; one too close to a wall or another gem, or on a moving row, is rejected instead.
  */
 data class GemPlacementDef(
     val type: GemType,

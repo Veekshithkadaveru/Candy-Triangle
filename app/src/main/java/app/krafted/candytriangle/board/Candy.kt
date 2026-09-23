@@ -22,6 +22,12 @@ class Candy(
     var active: Boolean = true
 
     /**
+     * True once the Magnet Gem (§4.2) has moved this candy; `ChainTracker.countsAsDirect` then
+     * decides, per `chains.magnetPullCountsAsDirectContact`, whether touching it is direct contact.
+     */
+    var magnetPulled: Boolean = false
+
+    /**
      * Ball-vs-sensor overlap test.
      * Returns true if the ball (center cx, cy, radius ballRadius) overlaps this candy.
      * 

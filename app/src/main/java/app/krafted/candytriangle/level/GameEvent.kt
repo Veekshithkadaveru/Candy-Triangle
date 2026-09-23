@@ -54,4 +54,16 @@ sealed interface GameEvent {
 
     /** A ball exited the board. */
     data object BallExited : GameEvent
+
+    /** A ball left the launcher (one per [LevelSession.launchBall]). */
+    data class BallLaunched(val aimRadians: Float, val ballsRemaining: Int) : GameEvent
+
+    /** A chain reached the Sugar Pop threshold and popped [popped] same-colour candies (§4.1). */
+    data class SugarPop(val color: CandyColor, val x: Float, val y: Float, val popped: Int) : GameEvent
+
+    /** A gem's board effect fired at (x, y) — the D5 VFX hook (Blast ring, Line beam, Magnet aura...). */
+    data class GemEffectTriggered(val gemType: GemType, val x: Float, val y: Float, val popped: Int) : GameEvent
+
+    /** Sugar Rush bonus applied on completion (§5.1): [balls] remaining × 500. */
+    data class SugarRush(val balls: Int, val bonus: Int) : GameEvent
 }

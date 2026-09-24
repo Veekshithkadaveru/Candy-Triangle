@@ -1,8 +1,8 @@
-// TEMPORARY D1/D2 HARNESS — D4 deletes this and makes HomeScreen the start destination.
+// TEMPORARY D1-D3 HARNESS — D4 deletes the dev menu and makes HomeScreen the start destination.
 //
-// Only [DevMenuScreen] and the DEV_MENU route are temporary. [Routes.GAME] and [Routes.JAR] are
-// permanent and D3/D4 build on them; the dev menu exists purely so D1 and D2 are reachable before
-// there is a splash, a home screen or a level map.
+// Only [DevMenuScreen] and the DEV_MENU route are temporary. [Routes.MAP], [Routes.GAME] and
+// [Routes.JAR] are permanent and D4 builds on them; the dev menu exists purely so the map, the
+// levels and the jar are reachable before there is a splash or a home screen.
 package app.krafted.candytriangle.ui.nav
 
 import androidx.compose.foundation.background
@@ -27,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -37,6 +39,7 @@ import app.krafted.candytriangle.R
 import app.krafted.candytriangle.level.LevelIds
 import app.krafted.candytriangle.ui.game.GameScreen
 import app.krafted.candytriangle.ui.jar.CandyJarScreen
+import app.krafted.candytriangle.ui.map.LevelMapScreen
 import app.krafted.candytriangle.ui.theme.NightVoid
 
 /** The app's route table. */
@@ -44,6 +47,9 @@ object Routes {
 
     /** TEMPORARY — D4 replaces this as the start destination with `HomeScreen`. */
     const val DEV_MENU = "dev_menu"
+
+    /** PERMANENT. The D3 level map: the way into every level and Sweet Room. */
+    const val MAP = "map"
 
     /** PERMANENT. */
     const val GAME = "game/{levelId}"
@@ -66,13 +72,15 @@ object Routes {
  * therefore calls `GameViewModel.onCleared()` — which is what stops the 60 Hz game thread and
  * releases the `LevelBoard`. A hand-rolled screen toggle keeps one Activity-scoped ViewModel alive
  * across level changes, leaking both the thread and the board, and §11's verification is JVM-only
- * so there is no emulator run that would catch it.
+ * so there is no emulator run that would catch it. The same scoping keeps the map's ViewModel —
+ * and its scroll position — alive underneath a level while it runs.
  *
  * ## Scope
  *
- * D1/D2 only. No splash, home, level map, results, settings, gem intro, world gate or crown UI —
- * those are D3 and D4. In particular there is deliberately **no route into a Sweet Room**: tier-3
- * jar unlocks are displayed by `CandyJarScreen` and entered from the map, which D3/D4 build.
+ * D1-D3: the map, the levels and the jar. The map is the way into every level, Sweet Rooms
+ * included: a node opens `LevelIntroDialog`, and Play navigates to [Routes.game] — B1..B4 are
+ * `game/101`..`game/104` in the one `LevelIds` keyspace, so they need no route of their own. No
+ * splash, home, results or settings screen yet; those are D4.
  */
 @Composable
 fun CandyNavHost(
@@ -86,8 +94,17 @@ fun CandyNavHost(
     ) {
         composable(Routes.DEV_MENU) {
             DevMenuScreen(
+                onOpenMap = { navController.navigate(Routes.MAP) },
                 onPlay = { levelId -> navController.navigate(Routes.game(levelId)) },
                 onOpenJar = { navController.navigate(Routes.JAR) },
+            )
+        }
+
+        composable(Routes.MAP) { entry ->
+            LevelMapScreen(
+                onBack = { entry.ifResumed { navController.popBackStack() } },
+                onPlayLevel = { levelId -> entry.ifResumed { navController.navigate(Routes.game(levelId)) } },
+                onOpenJar = { entry.ifResumed { navController.navigate(Routes.JAR) } },
             )
         }
 
@@ -100,10 +117,10 @@ fun CandyNavHost(
             GameScreen(
                 levelId = levelId,
                 onExit = { navController.popBackStack() },
-                // D1/D2 have no results screen, so a finished level simply returns to the menu.
-                // GameViewModel has already written crowns, the high score and the banked candies
-                // by this point (plan deviation D1-b) — D4's LevelCompleteScreen must display that
-                // write, not repeat it.
+                // No results screen until D4, so a finished level simply returns to whatever opened
+                // it — the map, or the dev menu. GameViewModel has already written crowns, the high
+                // score and the banked candies by this point (plan deviation D1-b) — D4's
+                // LevelCompleteScreen must display that write, not repeat it.
                 onLevelFinished = { _, _, _, _ -> navController.popBackStack() },
             )
         }
@@ -115,14 +132,28 @@ fun CandyNavHost(
 }
 
 /**
- * TEMPORARY D1/D2 HARNESS — D4 deletes this and makes HomeScreen the start destination.
+ * Runs [block] only while this destination is the resumed one — `dropUnlessResumed` for a callback
+ * that takes an argument.
  *
- * Deliberately unstyled: a level-id field, a Play button and a Candy Jar button, and nothing else.
- * Any polish spent here is polish thrown away in D4, and a styled dev menu invites someone to keep
- * it. It lives in this file so D4 deletes exactly one thing.
+ * A second tap that lands while the first navigation is still under way would otherwise pop the
+ * start destination off a double-tapped Back (a blank `NavHost`), or stack a second copy of a level
+ * when Play is pressed twice before the intro closes.
+ */
+private inline fun NavBackStackEntry.ifResumed(block: () -> Unit) {
+    if (lifecycle.currentState == Lifecycle.State.RESUMED) block()
+}
+
+/**
+ * TEMPORARY D1-D3 HARNESS — D4 deletes this and makes HomeScreen the start destination.
+ *
+ * Deliberately unstyled: a Level Map button, a level-id field with a Play button for jumping
+ * straight into any level, and a Candy Jar button — nothing else. Any polish spent here is polish
+ * thrown away in D4, and a styled dev menu invites someone to keep it. It lives in this file so D4
+ * deletes exactly one thing.
  */
 @Composable
 private fun DevMenuScreen(
+    onOpenMap: () -> Unit,
     onPlay: (Int) -> Unit,
     onOpenJar: () -> Unit,
     modifier: Modifier = Modifier,
@@ -143,9 +174,13 @@ private fun DevMenuScreen(
             style = MaterialTheme.typography.headlineMedium,
         )
         Text(
-            text = "D1/D2 dev menu — replaced by HomeScreen in D4.",
+            text = "D1-D3 dev menu — replaced by HomeScreen in D4.",
             style = MaterialTheme.typography.bodyMedium,
         )
+
+        Button(onClick = onOpenMap) {
+            Text(stringResource(R.string.map_title))
+        }
 
         OutlinedTextField(
             value = levelText,

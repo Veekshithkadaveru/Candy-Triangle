@@ -41,7 +41,8 @@ internal class GameLoop(
     private val listener: GameLoopListener,
     private val renderer: BoardRenderer,
     private val sprites: SpriteCache,
-    /** §6.1 world 1..4: picks the backdrop. Sweet Rooms report 0 and are mapped by the caller. */
+    /** §6.1 world 1..4: picks the backdrop. Sweet Rooms report 0 and are mapped by the caller
+     *  (`GameViewModel.backdropWorldFor`: Bn plays in world n). */
     private val worldIndex: Int,
     /** `WorldDef.pegTintArgb`: the peg colour and the glow tint cached for it. */
     private val pegTintArgb: Int,

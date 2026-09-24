@@ -31,9 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -292,7 +294,10 @@ fun PauseButton(
     IconButton(
         onClick = onClick,
         enabled = enabled,
-        modifier = modifier.clearAndSetSemantics { contentDescription = description },
+        // `semantics`, not `clearAndSetSemantics`: IconButton applies its `clickable` *after* this
+        // modifier on the same node, and a clearing node discards everything after it in the chain
+        // — the click action and Role.Button with it. The two drawn bars carry no semantics.
+        modifier = modifier.semantics { contentDescription = description },
     ) {
         // Drawn rather than loaded: no pause drawable ships in the asset pack, and D1 may not add
         // resources to the shared `res/drawable`.
@@ -391,10 +396,12 @@ private fun HudObjective.label(): String = when (type) {
     ObjectiveType.COLLECT_GEM -> {
         val gemType = gem
         if (gemType != null) {
+            // The gem's name agrees with the count ("Smash 2 Blast Gems", "Smash 1 Sugar Storm"),
+            // exactly as the intro dialog words the same objective.
             stringResource(
                 R.string.game_objective_collect_gem_type,
                 target,
-                stringResource(gemType.labelRes()),
+                pluralStringResource(gemType.countedNameRes(), target),
             )
         } else {
             stringResource(R.string.game_objective_collect_gem_any, target)
@@ -436,14 +443,19 @@ private fun CandyColor.labelRes(): Int = when (this) {
     CandyColor.BLUE -> R.string.candy_name_blue
 }
 
-private fun GemType.labelRes(): Int = when (this) {
-    GemType.SWEET -> R.string.gem_name_sweet
-    GemType.BLAST -> R.string.gem_name_blast
-    GemType.LINE -> R.string.gem_name_line
-    GemType.SPLIT -> R.string.gem_name_split
-    GemType.EXTRA_BALL -> R.string.gem_name_extra_ball
-    GemType.MAGNET -> R.string.gem_name_magnet
-    GemType.SUGAR_STORM -> R.string.gem_name_sugar_storm
+/**
+ * §4.2's gem names by count. Read-only use of the intro's `intro_gem_count_*` plurals, so the HUD
+ * and `LevelIntroDialog` word an objective identically and there is one set of plural names to
+ * translate. The singular `gem_name_*` read "Smash 2 Blast Gem".
+ */
+private fun GemType.countedNameRes(): Int = when (this) {
+    GemType.SWEET -> R.plurals.intro_gem_count_sweet
+    GemType.BLAST -> R.plurals.intro_gem_count_blast
+    GemType.LINE -> R.plurals.intro_gem_count_line
+    GemType.SPLIT -> R.plurals.intro_gem_count_split
+    GemType.EXTRA_BALL -> R.plurals.intro_gem_count_extra_ball
+    GemType.MAGNET -> R.plurals.intro_gem_count_magnet
+    GemType.SUGAR_STORM -> R.plurals.intro_gem_count_sugar_storm
 }
 
 // ------------------------------------------------------------------ previews

@@ -7,6 +7,8 @@ import app.krafted.candytriangle.data.ProgressStore
 import app.krafted.candytriangle.level.BallSkin
 import app.krafted.candytriangle.level.CandyColor
 import app.krafted.candytriangle.level.CrownCalculator
+import app.krafted.candytriangle.level.DEFAULT_WORLDS
+import app.krafted.candytriangle.level.GameConfig
 import app.krafted.candytriangle.level.LevelRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -266,6 +268,76 @@ class GameViewModelTest {
         assertTrue("the board must stay frozen once the attempt is over", viewModel.channel.paused)
     }
 
+    // ------------------------------------------------------------------ D3: the world a board is drawn in
+
+    /** Main levels are unchanged by D3: each plays in the §6.1 world that owns it. */
+    @Test
+    fun mainLevelsPlayInTheWorldThatOwnsThem() {
+        val config = GameConfig.DEFAULTS
+        assertEquals(1, GameViewModel.backdropWorldFor(levelId = 1, levelWorld = 1, config = config))
+        assertEquals(1, GameViewModel.backdropWorldFor(levelId = 10, levelWorld = 1, config = config))
+        assertEquals(2, GameViewModel.backdropWorldFor(levelId = 11, levelWorld = 2, config = config))
+        assertEquals(4, GameViewModel.backdropWorldFor(levelId = 40, levelWorld = 4, config = config))
+    }
+
+    /** As before D3, the config's world table outranks a main level's own `world`. */
+    @Test
+    fun aMainLevelFollowsTheConfigsWorldTableBeforeItsOwnWorld() {
+        assertEquals(2, GameViewModel.backdropWorldFor(levelId = 11, levelWorld = 1, config = GameConfig.DEFAULTS))
+
+        // Outside every configured range, the level's own world is the fallback.
+        val worldOneOnly = GameConfig(worlds = DEFAULT_WORLDS.take(1))
+        assertEquals(3, GameViewModel.backdropWorldFor(levelId = 25, levelWorld = 3, config = worldOneOnly))
+    }
+
+    /**
+     * D3's map draws Sweet Room Bn on World n's slice, so Bn plays on World n's backdrop and peg
+     * tint — not on World 1's for all four, which is where `world = 0` used to fall through to.
+     */
+    @Test
+    fun sweetRoomsPlayInTheWorldOfTheSliceTheyAreDrawnOn() {
+        val expected = mapOf(101 to 1, 102 to 2, 103 to 3, 104 to 4)
+        for ((id, world) in expected) {
+            assertEquals(
+                "Sweet Room $id",
+                world,
+                GameViewModel.backdropWorldFor(levelId = id, levelWorld = 0, config = GameConfig.DEFAULTS),
+            )
+        }
+
+        // The id decides, not the config: a world table that happens to span 101..104 is ignored.
+        val spansSweetRooms = GameConfig(
+            worlds = DEFAULT_WORLDS + DEFAULT_WORLDS[3].copy(index = 2, levelFrom = 101, levelTo = 104),
+        )
+        assertEquals(3, GameViewModel.backdropWorldFor(levelId = 103, levelWorld = 0, config = spansSweetRooms))
+    }
+
+    /** `world_1`..`world_4` are the only backdrops, so whatever the ids and config say, 1..4 it is. */
+    @Test
+    fun anythingOutOfRangeClampsIntoWorldsOneToFour() {
+        val config = GameConfig.DEFAULTS
+        assertEquals(1, GameViewModel.backdropWorldFor(levelId = 0, levelWorld = 0, config = config))
+        assertEquals(1, GameViewModel.backdropWorldFor(levelId = -7, levelWorld = -1, config = config))
+        // 105 is past B4: not a Sweet Room, so it has no slice of its own.
+        assertEquals(1, GameViewModel.backdropWorldFor(levelId = 105, levelWorld = 0, config = config))
+        assertEquals(4, GameViewModel.backdropWorldFor(levelId = 41, levelWorld = 9, config = config))
+
+        val fifthWorld = GameConfig(worlds = listOf(DEFAULT_WORLDS[0].copy(index = 5)))
+        assertEquals(4, GameViewModel.backdropWorldFor(levelId = 3, levelWorld = 1, config = fifthWorld))
+    }
+
+    /** End to end: a Sweet Room is published on its slice's world, which `attach` then draws. */
+    @Test
+    fun aSweetRoomIsPublishedOnItsSlicesWorld() = runTest {
+        val viewModel = newViewModel(levelId = 103, levelsJson = SWEET_ROOM_LEVELS_JSON)
+
+        val ready = viewModel.awaitReady()
+
+        assertEquals(103, ready.board.level.id)
+        assertEquals(0, ready.board.level.world)
+        assertEquals(3, ready.worldIndex)
+    }
+
     // ------------------------------------------------------------------ helpers
 
     /**
@@ -365,6 +437,22 @@ class GameViewModelTest {
                   "candies": { "seed": 7, "count": 0, "weights": { "BLUE": 1 } },
                   "gems": [], "cup": { "speed": 200 },
                   "objectives": [ { "type": "SCORE", "score": 1000000 } ]
+                }
+              ]
+            }
+        """.trimIndent()
+
+        /** B3 alone, shaped like the shipped Sweet Rooms: world 0, 15 balls, crowns [4, 8]. */
+        val SWEET_ROOM_LEVELS_JSON = """
+            {
+              "schemaVersion": 1,
+              "levels": [
+                {
+                  "id": 103, "code": "B3", "world": 0, "balls": 15, "crowns": [4, 8],
+                  "layout": { "spacing": 80, "pattern": "CLUSTERS", "clusters": [] },
+                  "candies": { "seed": 7, "count": 0, "weights": { "PINK": 1 } },
+                  "gems": [], "cup": { "speed": 200 },
+                  "objectives": [ { "type": "SCORE", "score": 7500 } ]
                 }
               ]
             }

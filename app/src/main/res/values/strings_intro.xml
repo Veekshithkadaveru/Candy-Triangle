@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Level intro dialog (`ui/intro`, phase D3) copy.
+
+    Its own file, like strings_game.xml and strings_jar.xml: strings.xml holds durable cross-screen
+    vocabulary only. Reused rather than duplicated, so the intro and the HUD name every goal in the
+    same words: game_level_label, game_sweet_room_label, game_objective_* (strings_game.xml), and
+    world_N_name, candy_name_*, gem_name_*, label_balls, label_best, label_crowns, action_play,
+    action_close, cd_crown_earned, cd_crown_locked (strings.xml).
+-->
+<resources>
+
+    <!-- ============ Header ============ -->
+    <!-- e.g. "World 2 · Velvet Swirl" -->
+    <string name="intro_world_format">World %1$d · %2$s</string>
+    <string name="intro_bonus_label">Bonus level</string>
+
+    <!-- ============ Goals (PRD §6.3) ============ -->
+    <string name="intro_section_goals">Goals</string>
+    <!-- "Clear every candy": a CLEAR_COLOR objective with no colour. LevelDef's mapper drops those,
+         so shipped levels never show it; it only keeps the dialog total. -->
+    <string name="intro_candy_any">candy</string>
+
+    <!-- Gem names by count, fed to game_objective_collect_gem_type ("Smash %1$d %2$s") so an intro
+         reads "Smash 2 Blast Gems" where the singular gem_name_* would give "Smash 2 Blast Gem". -->
+    <plurals name="intro_gem_count_sweet">
+        <item quantity="one">Sweet Gem</item>
+        <item quantity="other">Sweet Gems</item>
+    </plurals>
+    <plurals name="intro_gem_count_blast">
+        <item quantity="one">Blast Gem</item>
+        <item quantity="other">Blast Gems</item>
+    </plurals>
+    <plurals name="intro_gem_count_line">
+        <item quantity="one">Line Gem</item>
+        <item quantity="other">Line Gems</item>
+    </plurals>
+    <plurals name="intro_gem_count_split">
+        <item quantity="one">Split Gem</item>
+        <item quantity="other">Split Gems</item>
+    </plurals>
+    <plurals name="intro_gem_count_extra_ball">
+        <item quantity="one">Extra Ball</item>
+        <item quantity="other">Extra Balls</item>
+    </plurals>
+    <plurals name="intro_gem_count_magnet">
+        <item quantity="one">Magnet Gem</item>
+        <item quantity="other">Magnet Gems</item>
+    </plurals>
+    <plurals name="intro_gem_count_sugar_storm">
+        <item quantity="one">Sugar Storm</item>
+        <item quantity="other">Sugar Storms</item>
+    </plurals>
+
+    <!-- ============ Crowns (PRD §5.3) ============ -->
+    <string name="intro_crown_tier_clear">Complete the goals</string>
+    <!-- e.g. "Finish with 3+ balls left" — balls still in hand when the goals complete. -->
+    <plurals name="intro_crown_tier_balls">
+        <item quantity="one">Finish with %1$d+ ball left</item>
+        <item quantity="other">Finish with %1$d+ balls left</item>
+    </plurals>
+
+    <!-- ============ The board: gem row and moving rows ============ -->
+    <string name="intro_section_board">On this board</string>
+    <string name="intro_gem_new">New</string>
+    <string name="intro_moving_pegs">Moving pegs</string>
+
+    <!-- ============ Content descriptions ============ -->
+    <plurals name="intro_cd_crowns">
+        <item quantity="one">%1$d crown</item>
+        <item quantity="other">%1$d crowns</item>
+    </plurals>
+    <!-- e.g. "2 crowns: Finish with 3+ balls left, Crown not earned" -->
+    <string name="intro_cd_crown_tier">%1$s: %2$s, %3$s</string>
+    <!-- e.g. "Blast Gem, new" -->
+    <string name="intro_cd_gem_new">%1$s, new</string>
+
+</resources>

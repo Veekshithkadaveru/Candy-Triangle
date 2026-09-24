@@ -82,7 +82,7 @@ class GameSurfaceView @JvmOverloads constructor(
      * the player had already asked for.
      *
      * @param worldIndex §6.1 world (1..4), selecting the backdrop and the peg tint. Sweet Rooms
-     *   report world 0 and must be mapped by the caller.
+     *   report world 0 and must be mapped by the caller (`GameViewModel.backdropWorldFor`).
      */
     fun attach(
         board: LevelBoard,
@@ -265,7 +265,10 @@ class GameSurfaceView @JvmOverloads constructor(
 
         const val MAX_WORLD_INDEX: Int = 4
 
-        /** A Sweet Room reports world 0; it is drawn with World 1's panorama and pink pegs. */
+        /**
+         * Used only for an out-of-range index. Sweet Rooms no longer land here: since D3,
+         * `GameViewModel.backdropWorldFor` hands Bn world n, the map slice it is drawn on.
+         */
         const val FALLBACK_WORLD_INDEX: Int = 1
 
         /** World 1's pink, if the loaded config has no matching world. */

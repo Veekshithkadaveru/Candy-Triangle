@@ -22,6 +22,7 @@ import colorsys
 import math
 import os
 import shutil
+import struct
 import sys
 from xml.etree import ElementTree
 
@@ -47,7 +48,10 @@ OWNED_PATHS = (NODPI, ANYDPI, os.path.join(RES, "mipmap-"), os.path.join(RES, "d
 #
 # Android resource names must match [a-z0-9_]+ and may not start with a digit,
 # which is why the four panorama slices `1.png`-`4.png` become `world_N.png`.
-# These are byte-for-byte copies (no re-encode) so nothing is re-compressed.
+# These are byte-for-byte copies (no re-encode) so nothing is re-compressed --
+# except that the backdrops then lose an unused tRNS chunk (see
+# strip_unused_trns), which leaves every other chunk, the pixel data included,
+# byte-identical.
 # --------------------------------------------------------------------------
 
 COPIES = [
@@ -269,6 +273,66 @@ def transform_pixels(src_path: str, dst_path: str, fn) -> None:
 
 
 # --------------------------------------------------------------------------
+# Opaque backdrops
+#
+# elem/1.png-4.png are 8-bit palette PNGs whose tRNS chunk marks palette index
+# 255 transparent -- an index no pixel uses. That chunk alone makes Skia decode
+# them ARGB_8888 even when RGB_565 is requested (the level map asks for 565),
+# costing a full-size ARGB decode plus a conversion copy per slice. So it is
+# dropped at the chunk level: every other chunk (IHDR, iCCP, PLTE, IDAT, ...) is
+# written back byte for byte, nothing is re-compressed, and the decoded pixels
+# are checked identical before the file is replaced.
+# --------------------------------------------------------------------------
+
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+
+
+def png_chunks(data: bytes) -> list[tuple[bytes, bytes]]:
+    """(type, raw chunk bytes incl. length and CRC) for every chunk of a PNG."""
+    if not data.startswith(PNG_SIGNATURE):
+        raise ValueError("not a PNG")
+    chunks, i = [], len(PNG_SIGNATURE)
+    while i < len(data):
+        (length,) = struct.unpack(">I", data[i:i + 4])
+        end = i + 12 + length
+        chunks.append((data[i + 4:i + 8], data[i:end]))
+        i = end
+    return chunks
+
+
+def strip_unused_trns(path: str) -> bool:
+    """Drops a palette PNG's tRNS chunk if no pixel uses a non-opaque entry.
+
+    Returns True when the file was rewritten; a PNG with a genuinely translucent
+    pixel is left alone. Exits if the rewrite would decode to different pixels.
+    """
+    with open(path, "rb") as fh:
+        chunks = png_chunks(fh.read())
+    trns = [raw for kind, raw in chunks if kind == b"tRNS"]
+    if not trns:
+        return False
+    with Image.open(path) as im:
+        im.load()
+        if im.mode != "P":
+            return False
+        alphas = trns[0][8:-4]  # chunk data: after length + type, before the CRC
+        used = {index for _, index in im.getcolors(256)}
+        if any(alphas[i] < 255 for i in used if i < len(alphas)):
+            return False
+        before = im.convert("RGBA").tobytes()
+    tmp = path + ".tmp"
+    with open(tmp, "wb") as fh:
+        fh.write(PNG_SIGNATURE + b"".join(raw for kind, raw in chunks if kind != b"tRNS"))
+    with Image.open(tmp) as im:
+        after = im.convert("RGBA").tobytes()
+    if after != before:
+        os.remove(tmp)
+        sys.exit(f"Dropping tRNS would change the pixels of {rel(path)}")
+    os.replace(tmp, path)
+    return True
+
+
+# --------------------------------------------------------------------------
 # Steps
 # --------------------------------------------------------------------------
 
@@ -279,7 +343,9 @@ def step_copies() -> None:
         src = os.path.join(SRC, src_rel)
         dst = os.path.join(NODPI, dst_name)
         shutil.copyfile(src, dst)
-        note_write(dst, f"{png_detail(dst)}  <- {src_rel}")
+        opaque = dst_name.startswith("world_") and strip_unused_trns(dst)
+        note_write(dst, f"{png_detail(dst)}  <- {src_rel}"
+                        + ("  (unused tRNS dropped: decodes opaque)" if opaque else ""))
 
 
 def step_splash() -> None:

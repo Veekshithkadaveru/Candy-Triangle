@@ -171,6 +171,13 @@ internal fun CandyJarContent(
 @Composable
 private fun JarPanel(jar: JarUiState, modifier: Modifier = Modifier) {
     val colorName = stringResource(jar.color.nameRes())
+    val description = stringResource(
+        R.string.jar_cd_format,
+        colorName,
+        jar.count,
+        jar.tier,
+        JarUnlocks.MAX_TIER,
+    )
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
@@ -185,9 +192,7 @@ private fun JarPanel(jar: JarUiState, modifier: Modifier = Modifier) {
             candyColor = jar.color.tint(),
             modifier = Modifier
                 .size(width = 96.dp, height = 132.dp)
-                .semantics {
-                    contentDescription = jarDescription(colorName, jar)
-                },
+                .semantics { contentDescription = description },
         )
 
         Text(
@@ -292,9 +297,6 @@ private fun RewardRow(slot: RewardSlot) {
         )
     }
 }
-
-private fun jarDescription(colorName: String, jar: JarUiState): String =
-    "$colorName jar, ${jar.count} candies, tier ${jar.tier} of ${JarUnlocks.MAX_TIER}"
 
 private fun CandyColor.nameRes(): Int = when (this) {
     CandyColor.GREEN -> R.string.candy_name_green

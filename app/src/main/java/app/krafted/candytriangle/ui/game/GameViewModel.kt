@@ -14,6 +14,7 @@ import app.krafted.candytriangle.level.BallSkin
 import app.krafted.candytriangle.level.GameConfig
 import app.krafted.candytriangle.level.GameEvent
 import app.krafted.candytriangle.level.LevelDef
+import app.krafted.candytriangle.level.LevelIds
 import app.krafted.candytriangle.level.LevelRepository
 import app.krafted.candytriangle.level.LevelSession
 import app.krafted.candytriangle.ui.board.GameCommandChannel
@@ -210,10 +211,7 @@ class GameViewModel(
         val launcher = resolvedConfig.board.launcher
         _uiState.value = GameUiState.Ready(
             board = board,
-            // `worldFor` has no world for a Sweet Room (id 101..104); the backdrop still has to be
-            // one of world_1..world_4, so fall back to the level's own world and clamp into range.
-            worldIndex = (resolvedConfig.worldFor(board.level.id)?.index ?: board.level.world)
-                .coerceIn(WORLD_MIN, WORLD_MAX),
+            worldIndex = backdropWorldFor(board.level.id, board.level.world, resolvedConfig),
             pivotX = launcher.pivot.x,
             pivotY = launcher.pivot.y,
             aimClampRadians = board.params.aimClampRadians,
@@ -383,6 +381,26 @@ class GameViewModel(
 
         private const val WORLD_MIN = 1
         private const val WORLD_MAX = 4
+
+        /**
+         * The world (1..4) whose backdrop and §6.1 peg tint a level is drawn with — the
+         * `worldIndex` handed to `GameSurfaceView.attach`, which resolves both from it.
+         *
+         * A main level plays in the world that owns it: `config.worldFor`, else the level's own
+         * `world` — unchanged by D3. A Sweet Room has no world of its own (`world = 0`, no
+         * `WorldDef`) and used to fall through to World 1's panorama and pink pegs; D3's map draws
+         * Sweet Room Bn on World n's slice, so Bn now plays on World n's backdrop and pegs too
+         * (`id - LevelIds.BONUS_FIRST + 1`), the slice the player tapped it on. Anything else
+         * clamps into 1..4, because `world_1`..`world_4` are the only backdrops that exist.
+         */
+        internal fun backdropWorldFor(levelId: Int, levelWorld: Int, config: GameConfig): Int {
+            val world = if (LevelIds.isBonus(levelId)) {
+                levelId - LevelIds.BONUS_FIRST + 1
+            } else {
+                config.worldFor(levelId)?.index ?: levelWorld
+            }
+            return world.coerceIn(WORLD_MIN, WORLD_MAX)
+        }
 
         /**
          * Pulls the three collaborators out of `Context.appContainer`.

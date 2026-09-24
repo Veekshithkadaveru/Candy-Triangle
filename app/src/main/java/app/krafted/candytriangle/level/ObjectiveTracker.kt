@@ -8,13 +8,11 @@ import kotlin.math.max
  */
 class ObjectiveTracker(private val objectives: List<ObjectiveDef>) {
 
-    // Internal progress store for objectives that accumulate a count or score.
-    // Keyed by the objective instance.
-    private val progress = mutableMapOf<ObjectiveDef, Int>()
-
-    init {
-        objectives.forEach { progress[it] = 0 }
-    }
+    // Accumulated count or score per objective, by its position in [objectives] — never keyed by
+    // the def itself. ObjectiveDef is a data class, so two identical objectives (one goal authored
+    // twice) would share a single map entry that every event bumps once per objective: "collect 5
+    // pink" listed twice would complete after 3 pops.
+    private val progress = IntArray(objectives.size)
 
     /**
      * Checks if all objectives are currently met.
@@ -47,41 +45,32 @@ class ObjectiveTracker(private val objectives: List<ObjectiveDef>) {
     }
 
     /**
-     * Gets the current accumulated progress for the given objective.
+     * Gets the current accumulated progress for the given objective. Identical objectives always
+     * hold identical progress, so the first match answers for all of them; an objective this
+     * tracker was not built with reads 0.
      */
-    fun getProgress(def: ObjectiveDef): Int = progress[def] ?: 0
+    fun getProgress(def: ObjectiveDef): Int {
+        val index = objectives.indexOf(def)
+        return if (index >= 0) progress[index] else 0
+    }
 
     /**
      * Processes a game event to update progress for accumulating objectives.
      */
     fun processEvent(event: GameEvent) {
         when (event) {
-            is GameEvent.CandyPopped -> {
-                objectives
-                    .filter { it.type == ObjectiveType.COLLECT_CANDY && (it.color == null || it.color == event.color) }
-                    .forEach { progress[it] = getProgress(it) + 1 }
-            }
-            is GameEvent.GemSmashed -> {
-                objectives
-                    .filter { it.type == ObjectiveType.COLLECT_GEM && (it.gem == null || it.gem == event.gemType) }
-                    .forEach { progress[it] = getProgress(it) + 1 }
-            }
-            is GameEvent.CupCaught -> {
-                objectives
-                    .filter { it.type == ObjectiveType.CUP }
-                    .forEach { progress[it] = getProgress(it) + 1 }
-            }
-            is GameEvent.ChainAdvanced -> {
-                objectives
-                    .filter { it.type == ObjectiveType.CHAIN }
-                    .forEach {
-                        // Increment count exactly once when the chain reaches the target length.
-                        val targetLength = it.chain ?: 1
-                        if (event.length == targetLength) {
-                            progress[it] = getProgress(it) + 1
-                        }
-                    }
-            }
+            is GameEvent.CandyPopped ->
+                bump { it.type == ObjectiveType.COLLECT_CANDY && (it.color == null || it.color == event.color) }
+
+            is GameEvent.GemSmashed ->
+                bump { it.type == ObjectiveType.COLLECT_GEM && (it.gem == null || it.gem == event.gemType) }
+
+            is GameEvent.CupCaught -> bump { it.type == ObjectiveType.CUP }
+
+            // Increment count exactly once when the chain reaches the target length.
+            is GameEvent.ChainAdvanced ->
+                bump { it.type == ObjectiveType.CHAIN && event.length == (it.chain ?: 1) }
+
             else -> {
                 // Other events don't directly drive internal counter progress.
             }
@@ -93,8 +82,13 @@ class ObjectiveTracker(private val objectives: List<ObjectiveDef>) {
      */
     fun addScore(points: Int) {
         if (points <= 0) return
-        objectives
-            .filter { it.type == ObjectiveType.SCORE }
-            .forEach { progress[it] = getProgress(it) + points }
+        bump(points) { it.type == ObjectiveType.SCORE }
+    }
+
+    /** Adds [amount] to every objective [matches] accepts — once per objective, duplicates included. */
+    private inline fun bump(amount: Int = 1, matches: (ObjectiveDef) -> Boolean) {
+        for (i in objectives.indices) {
+            if (matches(objectives[i])) progress[i] += amount
+        }
     }
 }

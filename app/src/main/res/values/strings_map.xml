@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Level map (D3) copy. A separate file from res/values/strings.xml, which holds only durable
+    cross-screen strings — screen-specific copy is authored beside the screen that owns it, the same
+    rule as strings_game.xml, strings_jar.xml and strings_intro.xml.
+
+    Generic labels this screen reuses from strings.xml rather than duplicating:
+    action_back, label_candy_jar, world_1_name..world_4_name, candy_name_green/purple/pink/blue.
+-->
+<resources>
+
+    <!-- ============ Screen chrome ============ -->
+    <string name="map_title">Level Map</string>
+    <!-- The top bar's crown chip: main-level crowns out of all 120, e.g. "12 / 120" -->
+    <string name="map_crowns_format">%1$d / %2$d</string>
+    <string name="map_cd_crowns_total">%1$d of %2$d crowns</string>
+
+    <!-- ============ World banners (PRD §6.1) ============ -->
+    <!-- Only reached if the config ever describes a world past the four named ones. -->
+    <string name="map_world_fallback">World %1$d</string>
+    <!-- Crowns earned in this world out of those available, e.g. "12 / 30" -->
+    <string name="map_banner_crowns">%1$d / %2$d</string>
+    <!-- e.g. "Velvet Swirl, 12 of 30 crowns" -->
+    <string name="map_cd_world_banner">%1$s, %2$d of %3$d crowns</string>
+    <string name="map_cd_world_banner_locked">%1$s, locked, %2$d of %3$d crowns</string>
+
+    <!-- ============ Level nodes ============ -->
+    <string name="map_cd_level_available">Level %1$d, ready to play</string>
+    <string name="map_cd_level_locked">Level %1$d, locked</string>
+    <plurals name="map_cd_level_cleared">
+        <item quantity="one">Level %1$d, %2$d crown</item>
+        <item quantity="other">Level %1$d, %2$d crowns</item>
+    </plurals>
+    <!-- Wraps the current level's description, e.g. "Level 12, ready to play, you are here" -->
+    <string name="map_cd_current_format">%1$s, you are here</string>
+
+    <!-- ============ Sweet Rooms (PRD §7) ============ -->
+    <!-- A locked room's jar progress toward tier 3, e.g. "143 / 200" -->
+    <string name="map_jar_progress">%1$d / %2$d</string>
+    <string name="map_cd_sweet_room_available">Sweet Room %1$s, ready to play</string>
+    <!-- e.g. "Sweet Room B1, locked, Green jar 143 of 200" -->
+    <string name="map_cd_sweet_room_locked">Sweet Room %1$s, locked, %2$s jar %3$d of %4$d</string>
+    <plurals name="map_cd_sweet_room_cleared">
+        <item quantity="one">Sweet Room %1$s, %2$d crown</item>
+        <item quantity="other">Sweet Room %1$s, %2$d crowns</item>
+    </plurals>
+
+    <!-- ============ World gates (PRD §6.2) ============ -->
+    <string name="map_gate_clear_level">Clear Level %1$d</string>
+    <!-- The player's main-level crowns against the gate's requirement, e.g. "12 / 15" -->
+    <string name="map_gate_crowns">%1$d / %2$d</string>
+    <string name="map_cd_gate_open">%1$s gate, open</string>
+    <!-- e.g. "Velvet Swirl gate, locked. Clear Level 10: done. Crowns 12 of 15: not yet." -->
+    <string name="map_cd_gate_shut">%1$s gate, locked. Clear Level %2$d: %3$s. Crowns %4$d of %5$d: %6$s.</string>
+    <string name="map_cd_requirement_met">done</string>
+    <string name="map_cd_requirement_unmet">not yet</string>
+
+    <!-- ============ Locked-tap hints ============ -->
+    <string name="map_hint_clear_previous">Clear Level %1$d first</string>
+    <!-- e.g. "Clear Level 10 to open Velvet Swirl" -->
+    <string name="map_hint_gate_level">Clear Level %1$d to open %2$s</string>
+    <!-- e.g. "Collect 3 more crowns to open Velvet Swirl" -->
+    <plurals name="map_hint_gate_crowns">
+        <item quantity="one">Collect %1$d more crown to open %2$s</item>
+        <item quantity="other">Collect %1$d more crowns to open %2$s</item>
+    </plurals>
+    <!-- e.g. "Clear Level 10 and collect 3 more crowns to open Velvet Swirl" -->
+    <plurals name="map_hint_gate_level_and_crowns">
+        <item quantity="one">Clear Level %1$d and collect %2$d more crown to open %3$s</item>
+        <item quantity="other">Clear Level %1$d and collect %2$d more crowns to open %3$s</item>
+    </plurals>
+    <!-- e.g. "Bank 57 more Green candies to open Sweet Room B1" -->
+    <plurals name="map_hint_fill_jar">
+        <item quantity="one">Bank %1$d more %2$s candy to open Sweet Room %3$s</item>
+        <item quantity="other">Bank %1$d more %2$s candies to open Sweet Room %3$s</item>
+    </plurals>
+
+</resources>

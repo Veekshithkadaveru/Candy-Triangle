@@ -2,29 +2,22 @@ package app.krafted.candytriangle.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import app.krafted.candytriangle.R
 
 /**
- * TODO(D4 — Screens, Popups & Game Flow): switch [CandyFontFamily] to Fredoka.
- *
- * PRD §8 specifies Fredoka as the game face, but no font file ships in the
- * `plinko_dev` asset pack and the app declares no network permission, so the
- * .ttf cannot be fetched at build time or at runtime. Until someone drops the
- * files into `res/font/` (e.g. `fredoka_regular.ttf`, `fredoka_semibold.ttf`,
- * `fredoka_bold.ttf`) this stays on the platform default face.
- *
- * When the files land, this is a one-line change — every style below already
- * routes through [CandyFontFamily]:
- *
- *     val CandyFontFamily = FontFamily(
- *         Font(R.font.fredoka_regular, FontWeight.Normal),
- *         Font(R.font.fredoka_semibold, FontWeight.SemiBold),
- *         Font(R.font.fredoka_bold, FontWeight.Bold),
- *     )
+ * Bundled Fredoka font weights. They ship in `res/font`, so typography stays available with no
+ * network permission and every screen uses the same rounded game face on first launch.
  */
-val CandyFontFamily: FontFamily = FontFamily.Default
+val CandyFontFamily: FontFamily = FontFamily(
+    Font(R.font.fredoka_regular, weight = FontWeight.Normal),
+    Font(R.font.fredoka_medium, weight = FontWeight.Medium),
+    Font(R.font.fredoka_semibold, weight = FontWeight.SemiBold),
+    Font(R.font.fredoka_bold, weight = FontWeight.Bold),
+)
 
 val Typography = Typography(
     displayLarge = TextStyle(

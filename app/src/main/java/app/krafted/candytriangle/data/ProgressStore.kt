@@ -22,9 +22,9 @@ import kotlinx.coroutines.flow.map
  * §10 persistence keys owned by [ProgressStore].
  *
  * §10 sketches a single `ProgressKeys` object holding progress *and* settings. That is split here:
- * the audio/haptics flags live in [SettingsKeys] next to [SettingsStore], because the two have
+ * the vibration flag lives in [SettingsKeys] next to [SettingsStore], because the two have
  * different lifetimes — [ProgressStore.resetProgress] wipes everything in this object and must not
- * touch the player's sound toggles. The key *strings* are unchanged from §10, so the two objects
+ * touch the player's feedback preference. The key string is unchanged from §10, so the two objects
  * can safely address the same preferences file; whether `AppContainer` hands both stores one
  * `DataStore` or two is its call.
  */
@@ -263,9 +263,9 @@ class ProgressStore(private val dataStore: DataStore<Preferences>) {
     /**
      * Wipes every key this store owns — D4's Progress Reset in Settings.
      *
-     * Crowns, high scores, jars, equipped cosmetics and seen intros all go; the audio and haptics
-     * flags owned by [SettingsStore] deliberately survive, since a player asking to replay the
-     * game from level 1 is not asking to have their music turned back on. Keys are matched by
+     * Crowns, high scores, jars, equipped cosmetics and seen intros all go; the vibration flag
+     * owned by [SettingsStore] deliberately survives, since resetting progress should not change
+     * an accessibility/feedback preference. Keys are matched by
      * §10's name shape, so per-level entries vanish without having to enumerate all 44 levels.
      */
     suspend fun resetProgress() {

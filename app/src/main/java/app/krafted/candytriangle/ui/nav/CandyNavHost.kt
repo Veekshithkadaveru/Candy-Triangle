@@ -1,32 +1,13 @@
-// TEMPORARY D1-D3 HARNESS — D4 deletes the dev menu and makes HomeScreen the start destination.
-//
-// Only [DevMenuScreen] and the DEV_MENU route are temporary. [Routes.MAP], [Routes.GAME] and
-// [Routes.JAR] are permanent and D4 builds on them; the dev menu exists purely so the map, the
-// levels and the jar are reachable before there is a splash or a home screen.
 package app.krafted.candytriangle.ui.nav
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -35,52 +16,97 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import app.krafted.candytriangle.R
+import app.krafted.candytriangle.level.CandyColor
 import app.krafted.candytriangle.level.LevelIds
 import app.krafted.candytriangle.ui.game.GameScreen
+import app.krafted.candytriangle.ui.game.LevelOutcome
+import app.krafted.candytriangle.ui.home.HomeScreen
+import app.krafted.candytriangle.ui.home.SplashScreen
 import app.krafted.candytriangle.ui.jar.CandyJarScreen
 import app.krafted.candytriangle.ui.map.LevelMapScreen
-import app.krafted.candytriangle.ui.theme.NightVoid
+import app.krafted.candytriangle.ui.results.LevelResultScreen
+import app.krafted.candytriangle.ui.settings.SettingsScreen
 
-/** The app's route table. */
+/** The app's route table and the lossless result-path codec. */
 object Routes {
-
-    /** TEMPORARY — D4 replaces this as the start destination with `HomeScreen`. */
-    const val DEV_MENU = "dev_menu"
-
-    /** PERMANENT. The D3 level map: the way into every level and Sweet Room. */
+    const val SPLASH = "splash"
+    const val HOME = "home"
     const val MAP = "map"
-
-    /** PERMANENT. */
     const val GAME = "game/{levelId}"
-
-    /** PERMANENT. */
     const val JAR = "jar"
+    const val SETTINGS = "settings"
 
-    /** The level-id argument name, shared by [GAME] and its `navArgument`. */
     const val ARG_LEVEL_ID = "levelId"
+    private const val ARG_WON = "won"
+    private const val ARG_CROWNS = "crowns"
+    private const val ARG_SCORE = "score"
+    private const val ARG_BALLS_REMAINING = "ballsRemaining"
+    private const val ARG_SUGAR_RUSH = "sugarRushBonus"
+    private const val ARG_GREEN = "green"
+    private const val ARG_PURPLE = "purple"
+    private const val ARG_PINK = "pink"
+    private const val ARG_BLUE = "blue"
 
-    fun game(levelId: Int) = "game/$levelId"
+    const val RESULT =
+        "result/{$ARG_LEVEL_ID}/{$ARG_WON}/{$ARG_CROWNS}/{$ARG_SCORE}/" +
+            "{$ARG_BALLS_REMAINING}/{$ARG_SUGAR_RUSH}/{$ARG_GREEN}/{$ARG_PURPLE}/{$ARG_PINK}/{$ARG_BLUE}"
+
+    val resultArguments = listOf(
+        navArgument(ARG_LEVEL_ID) { type = NavType.IntType },
+        navArgument(ARG_WON) { type = NavType.BoolType },
+        navArgument(ARG_CROWNS) { type = NavType.IntType },
+        navArgument(ARG_SCORE) { type = NavType.IntType },
+        navArgument(ARG_BALLS_REMAINING) { type = NavType.IntType },
+        navArgument(ARG_SUGAR_RUSH) { type = NavType.IntType },
+        navArgument(ARG_GREEN) { type = NavType.IntType },
+        navArgument(ARG_PURPLE) { type = NavType.IntType },
+        navArgument(ARG_PINK) { type = NavType.IntType },
+        navArgument(ARG_BLUE) { type = NavType.IntType },
+    )
+
+    fun game(levelId: Int): String = "game/$levelId"
+
+    fun result(outcome: LevelOutcome): String = buildString {
+        append("result/")
+        append(outcome.levelId).append('/')
+        append(outcome.won).append('/')
+        append(outcome.crowns).append('/')
+        append(outcome.score).append('/')
+        append(outcome.ballsRemaining).append('/')
+        append(outcome.sugarRushBonus).append('/')
+        append(outcome.collected[CandyColor.GREEN] ?: 0).append('/')
+        append(outcome.collected[CandyColor.PURPLE] ?: 0).append('/')
+        append(outcome.collected[CandyColor.PINK] ?: 0).append('/')
+        append(outcome.collected[CandyColor.BLUE] ?: 0)
+    }
+
+    fun outcome(entry: NavBackStackEntry): LevelOutcome {
+        val args = requireNotNull(entry.arguments)
+        val collected = buildMap {
+            fun add(color: CandyColor, key: String) {
+                val count = args.getInt(key)
+                if (count > 0) put(color, count)
+            }
+            add(CandyColor.GREEN, ARG_GREEN)
+            add(CandyColor.PURPLE, ARG_PURPLE)
+            add(CandyColor.PINK, ARG_PINK)
+            add(CandyColor.BLUE, ARG_BLUE)
+        }
+        return LevelOutcome(
+            levelId = args.getInt(ARG_LEVEL_ID),
+            won = args.getBoolean(ARG_WON),
+            crowns = args.getInt(ARG_CROWNS),
+            score = args.getInt(ARG_SCORE),
+            ballsRemaining = args.getInt(ARG_BALLS_REMAINING),
+            collected = collected,
+            sugarRushBonus = args.getInt(ARG_SUGAR_RUSH),
+        )
+    }
 }
 
 /**
- * The single navigation graph, hosted by `MainActivity`.
- *
- * ## Why a real `NavHost` and not a `remember { mutableStateOf<Screen>() }` toggle
- *
- * `navigation-compose` gives every `NavBackStackEntry` its own `ViewModelStore`. Leaving a level
- * therefore calls `GameViewModel.onCleared()` — which is what stops the 60 Hz game thread and
- * releases the `LevelBoard`. A hand-rolled screen toggle keeps one Activity-scoped ViewModel alive
- * across level changes, leaking both the thread and the board, and §11's verification is JVM-only
- * so there is no emulator run that would catch it. The same scoping keeps the map's ViewModel —
- * and its scroll position — alive underneath a level while it runs.
- *
- * ## Scope
- *
- * D1-D3: the map, the levels and the jar. The map is the way into every level, Sweet Rooms
- * included: a node opens `LevelIntroDialog`, and Play navigates to [Routes.game] — B1..B4 are
- * `game/101`..`game/104` in the one `LevelIds` keyspace, so they need no route of their own. No
- * splash, home, results or settings screen yet; those are D4.
+ * The single destination graph. Each level owns its own back-stack `ViewModelStore`, so removing
+ * the game destination before showing results also tears down the board and game thread.
  */
 @Composable
 fun CandyNavHost(
@@ -89,21 +115,55 @@ fun CandyNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Routes.DEV_MENU,
+        startDestination = Routes.SPLASH,
         modifier = modifier,
+        enterTransition = {
+            fadeIn(tween(durationMillis = 220, delayMillis = 70)) +
+                slideInHorizontally(
+                    animationSpec = tween(360, easing = FastOutSlowInEasing),
+                    initialOffsetX = { it / 10 },
+                )
+        },
+        exitTransition = {
+            fadeOut(tween(180)) +
+                slideOutHorizontally(tween(280, easing = FastOutSlowInEasing)) { -it / 14 }
+        },
+        popEnterTransition = {
+            fadeIn(tween(durationMillis = 220, delayMillis = 50)) +
+                slideInHorizontally(tween(340, easing = FastOutSlowInEasing)) { -it / 10 }
+        },
+        popExitTransition = {
+            fadeOut(tween(180)) +
+                slideOutHorizontally(tween(280, easing = FastOutSlowInEasing)) { it / 14 }
+        },
     ) {
-        composable(Routes.DEV_MENU) {
-            DevMenuScreen(
-                onOpenMap = { navController.navigate(Routes.MAP) },
-                onPlay = { levelId -> navController.navigate(Routes.game(levelId)) },
-                onOpenJar = { navController.navigate(Routes.JAR) },
+        composable(Routes.SPLASH) { entry ->
+            SplashScreen(
+                onFinished = {
+                    entry.ifResumed {
+                        navController.navigate(Routes.HOME) {
+                            popUpTo(Routes.SPLASH) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    }
+                },
+            )
+        }
+
+        composable(Routes.HOME) { entry ->
+            HomeScreen(
+                onPlay = { entry.ifResumed { navController.navigate(Routes.MAP) } },
+                onOpenJar = { entry.ifResumed { navController.navigate(Routes.JAR) } },
+                onOpenSettings = { entry.ifResumed { navController.navigate(Routes.SETTINGS) } },
             )
         }
 
         composable(Routes.MAP) { entry ->
             LevelMapScreen(
                 onBack = { entry.ifResumed { navController.popBackStack() } },
-                onPlayLevel = { levelId -> entry.ifResumed { navController.navigate(Routes.game(levelId)) } },
+                onPlayLevel = { levelId ->
+                    entry.ifResumed { navController.navigate(Routes.game(levelId)) }
+                },
                 onOpenJar = { entry.ifResumed { navController.navigate(Routes.JAR) } },
             )
         }
@@ -111,94 +171,56 @@ fun CandyNavHost(
         composable(
             route = Routes.GAME,
             arguments = listOf(navArgument(Routes.ARG_LEVEL_ID) { type = NavType.IntType }),
-        ) { backStackEntry ->
-            val levelId = backStackEntry.arguments?.getInt(Routes.ARG_LEVEL_ID)
-                ?: LevelIds.MAIN_FIRST
+        ) { entry ->
+            val levelId = entry.arguments?.getInt(Routes.ARG_LEVEL_ID) ?: LevelIds.MAIN_FIRST
             GameScreen(
                 levelId = levelId,
-                onExit = { navController.popBackStack() },
-                // No results screen until D4, so a finished level simply returns to whatever opened
-                // it — the map, or the dev menu. GameViewModel has already written crowns, the high
-                // score and the banked candies by this point (plan deviation D1-b) — D4's
-                // LevelCompleteScreen must display that write, not repeat it.
-                onLevelFinished = { _, _, _, _ -> navController.popBackStack() },
+                onExit = { entry.ifResumed { navController.popBackStack() } },
+                onLevelFinished = { outcome ->
+                    entry.ifResumed {
+                        navController.navigate(Routes.result(outcome)) {
+                            popUpTo(Routes.GAME) { inclusive = true }
+                        }
+                    }
+                },
             )
         }
 
-        composable(Routes.JAR) {
-            CandyJarScreen(onBack = { navController.popBackStack() })
+        composable(route = Routes.RESULT, arguments = Routes.resultArguments) { entry ->
+            val outcome = Routes.outcome(entry)
+            LevelResultScreen(
+                outcome = outcome,
+                onContinue = { entry.ifResumed { navController.popBackStack() } },
+                onRetry = {
+                    entry.ifResumed {
+                        navController.navigate(Routes.game(outcome.levelId)) {
+                            popUpTo(Routes.RESULT) { inclusive = true }
+                        }
+                    }
+                },
+                onHome = {
+                    entry.ifResumed {
+                        if (!navController.popBackStack(Routes.HOME, inclusive = false)) {
+                            navController.navigate(Routes.HOME) {
+                                popUpTo(navController.graph.id) { inclusive = true }
+                            }
+                        }
+                    }
+                },
+            )
+        }
+
+        composable(Routes.JAR) { entry ->
+            CandyJarScreen(onBack = { entry.ifResumed { navController.popBackStack() } })
+        }
+
+        composable(Routes.SETTINGS) { entry ->
+            SettingsScreen(onBack = { entry.ifResumed { navController.popBackStack() } })
         }
     }
 }
 
-/**
- * Runs [block] only while this destination is the resumed one — `dropUnlessResumed` for a callback
- * that takes an argument.
- *
- * A second tap that lands while the first navigation is still under way would otherwise pop the
- * start destination off a double-tapped Back (a blank `NavHost`), or stack a second copy of a level
- * when Play is pressed twice before the intro closes.
- */
+/** Drops double taps while a destination transition is already underway. */
 private inline fun NavBackStackEntry.ifResumed(block: () -> Unit) {
     if (lifecycle.currentState == Lifecycle.State.RESUMED) block()
-}
-
-/**
- * TEMPORARY D1-D3 HARNESS — D4 deletes this and makes HomeScreen the start destination.
- *
- * Deliberately unstyled: a Level Map button, a level-id field with a Play button for jumping
- * straight into any level, and a Candy Jar button — nothing else. Any polish spent here is polish
- * thrown away in D4, and a styled dev menu invites someone to keep it. It lives in this file so D4
- * deletes exactly one thing.
- */
-@Composable
-private fun DevMenuScreen(
-    onOpenMap: () -> Unit,
-    onPlay: (Int) -> Unit,
-    onOpenJar: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    var levelText by rememberSaveable { mutableStateOf(LevelIds.MAIN_FIRST.toString()) }
-    val levelId = remember(levelText) { levelText.toIntOrNull() }
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(NightVoid)
-            .systemBarsPadding()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        Text(
-            text = stringResource(R.string.app_name),
-            style = MaterialTheme.typography.headlineMedium,
-        )
-        Text(
-            text = "D1-D3 dev menu — replaced by HomeScreen in D4.",
-            style = MaterialTheme.typography.bodyMedium,
-        )
-
-        Button(onClick = onOpenMap) {
-            Text(stringResource(R.string.map_title))
-        }
-
-        OutlinedTextField(
-            value = levelText,
-            onValueChange = { levelText = it.filter(Char::isDigit).take(3) },
-            label = { Text(stringResource(R.string.label_level)) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        )
-
-        Button(
-            onClick = { levelId?.let(onPlay) },
-            enabled = levelId != null,
-        ) {
-            Text(stringResource(R.string.action_play))
-        }
-
-        OutlinedButton(onClick = onOpenJar) {
-            Text(stringResource(R.string.label_candy_jar))
-        }
-    }
 }

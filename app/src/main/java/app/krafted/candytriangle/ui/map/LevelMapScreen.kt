@@ -235,7 +235,7 @@ internal fun LevelMapContent(
  * Scrolls the map — once — so the current level's node is centred (`MapScrollMath.openingScroll`).
  *
  * "Once" is the design. It waits for [LevelMapUiState.loaded], so it never centres the
- * fresh-install placeholder's level 1. The flag is `rememberSaveable`, so coming back from a level
+ * provisional fresh-install level 1. The flag is `rememberSaveable`, so coming back from a level
  * (this destination stays on the back stack) or from a process restore does not yank the map
  * away from where `LazyListState` restored it. A player who scrolled before progress loaded keeps
  * their own position.

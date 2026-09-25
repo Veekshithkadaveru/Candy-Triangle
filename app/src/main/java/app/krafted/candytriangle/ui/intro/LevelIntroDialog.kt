@@ -50,6 +50,7 @@ import app.krafted.candytriangle.R
 import app.krafted.candytriangle.level.CandyColor
 import app.krafted.candytriangle.level.GemType
 import app.krafted.candytriangle.level.ObjectiveType
+import app.krafted.candytriangle.ui.components.candyDialogEntrance
 import app.krafted.candytriangle.ui.theme.CandyGold
 import app.krafted.candytriangle.ui.theme.CandyPink
 import app.krafted.candytriangle.ui.theme.CandyTriangleTheme
@@ -94,7 +95,12 @@ fun LevelIntroDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
-        IntroCard(state = state, onPlay = onPlay, onDismiss = onDismiss, modifier = modifier)
+        IntroCard(
+            state = state,
+            onPlay = onPlay,
+            onDismiss = onDismiss,
+            modifier = modifier.candyDialogEntrance(),
+        )
     }
 }
 

@@ -108,7 +108,7 @@ class LevelMapViewModelTest {
     // ---------------------------------------------------------------- the map
 
     @Test
-    fun uiStateIsTheUnloadedPlaceholderUntilSomeoneSubscribes() = runTest(mainDispatcher) {
+    fun uiStateUsesTheUnloadedValueUntilSomeoneSubscribes() = runTest(mainDispatcher) {
         val viewModel = viewModel()
         advanceUntilIdle()
 
@@ -171,7 +171,7 @@ class LevelMapViewModelTest {
         assertNotNull(intro)
         assertEquals(1, intro!!.levelId)
         assertEquals(listOf(1), introsBuilt)
-        // Not the `null` "not parsed yet" placeholder the map starts from.
+        // Not the `null` "not parsed yet" initial state the map starts from.
         assertSame(configLoader.config(), configsSeen.single())
     }
 
@@ -296,7 +296,7 @@ class LevelMapViewModelTest {
     // ---------------------------------------------------------------- the gate reads live data
 
     /**
-     * With nobody collecting, `uiState` is still the `INITIAL` placeholder in which level 2 is
+     * With nobody collecting, `uiState` is still the provisional `INITIAL` state in which level 2 is
      * locked — yet the store says level 1 is cleared, and the store is what the gate reads.
      */
     @Test

@@ -42,9 +42,8 @@ import kotlinx.coroutines.launch
  *
  * ## Trails
  *
- * D2 unlocks, offers and persists a [TrailType], and that is the entirety of D2's trail scope.
- * **Nothing draws a trail** — the ball-trail particle system is D5's job. Equipping one today
- * changes a preference and the selector's highlight, and no pixel on the board.
+ * The ViewModel unlocks, offers and persists a [TrailType]. `GameViewModel` copies the equipped
+ * value to the command channel before a board is published, and `BoardRenderer` draws it.
  *
  * ## Sweet Rooms
  *

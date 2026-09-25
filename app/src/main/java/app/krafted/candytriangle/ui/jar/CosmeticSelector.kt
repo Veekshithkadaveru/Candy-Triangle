@@ -51,8 +51,8 @@ import app.krafted.candytriangle.ui.theme.NightSurfaceHigh
  * `ProgressStore.equipBallSkin`'s KDoc hands unlock validation to D2 and a UI-only gate would be a
  * single point of failure.
  *
- * **Trails are equipped here and drawn nowhere.** The ball-trail particle system is D5's job; D2's
- * entire trail scope is unlocking one, offering it and persisting the choice.
+ * Trails equipped here are copied to the game-thread command channel and drawn as a short
+ * velocity-aligned candy streak by `BoardRenderer`.
  *
  * Stateless: all state in, two callbacks out.
  */

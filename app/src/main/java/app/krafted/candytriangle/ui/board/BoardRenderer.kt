@@ -10,6 +10,8 @@ import app.krafted.candytriangle.board.LevelBoard
 import app.krafted.candytriangle.engine.ColliderKind
 import app.krafted.candytriangle.level.BoardPoint
 import app.krafted.candytriangle.level.CandyColor
+import app.krafted.candytriangle.level.TrailType
+import kotlin.math.sqrt
 
 /**
  * Draws one frame of the board onto a hardware canvas, in §9.2's order.
@@ -63,6 +65,7 @@ class BoardRenderer {
         worldTintArgb: Int,
         aimPath: List<BoardPoint>?,
         showAim: Boolean,
+        trail: TrailType,
     ) {
         // 1. Clear. A hardware canvas has no partial damage, so the whole surface is redrawn and
         //    SRC (rather than SRC_OVER) avoids blending against the previous buffer.
@@ -76,13 +79,13 @@ class BoardRenderer {
 
         // 4-11.
         drawTriangleFrame(canvas, board, transform, worldTintArgb)
-        drawLauncher(canvas, board, transform)
+        drawLauncher(canvas, board, transform, sprites)
         drawPegs(canvas, board, transform, sprites, worldTintArgb)
         drawCandies(canvas, board, transform, sprites)
         drawGems(canvas, board, transform, sprites)
         drawCup(canvas, board, transform, sprites)
         if (showAim) drawAimGuide(canvas, transform, aimPath)
-        drawBalls(canvas, board, transform, sprites)
+        drawBalls(canvas, board, transform, sprites, trail)
     }
 
     // -- 2. backdrop ------------------------------------------------------------------------------
@@ -124,7 +127,12 @@ class BoardRenderer {
 
     // -- 5. launcher (§9.2: cannon barrel + peppermint swirl pivot + gold collar) -------------------
 
-    private fun drawLauncher(canvas: Canvas, board: LevelBoard, transform: BoardTransform) {
+    private fun drawLauncher(
+        canvas: Canvas,
+        board: LevelBoard,
+        transform: BoardTransform,
+        sprites: SpriteCache,
+    ) {
         val pivot = board.config.board.launcher.pivot
         val px = transform.sx(pivot.x)
         val py = transform.sy(pivot.y)
@@ -138,6 +146,14 @@ class BoardRenderer {
         val halfWidth = transform.len(BARREL_WIDTH_U * 0.5f)
         val corner = transform.len(BARREL_WIDTH_U * 0.35f)
         rectF.set(px - halfWidth, py, px + halfWidth, py + transform.len(BARREL_LENGTH_U))
+
+        val barrelGlow = sprites.glow(SpriteCache.GOLD_GLOW_ARGB)
+        if (barrelGlow != null && !barrelGlow.isRecycled) {
+            val halo = transform.len(BARREL_GLOW_U)
+            ovalF.set(rectF.left - halo, rectF.top - halo, rectF.right + halo, rectF.bottom + halo)
+            glowPaint.alpha = BARREL_GLOW_ALPHA
+            canvas.drawBitmap(barrelGlow, null, ovalF, glowPaint)
+        }
         fillPaint.color = BARREL_BODY
         fillPaint.alpha = 255
         canvas.drawRoundRect(rectF, corner, corner, fillPaint)
@@ -145,6 +161,16 @@ class BoardRenderer {
         strokePaint.alpha = 255
         strokePaint.strokeWidth = transform.len(BARREL_EDGE_WIDTH_U)
         canvas.drawRoundRect(rectF, corner, corner, strokePaint)
+
+        strokePaint.color = SWIRL_PINK
+        strokePaint.alpha = BARREL_CORE_ALPHA
+        strokePaint.strokeWidth = transform.len(BARREL_CORE_WIDTH_U)
+        canvas.drawLine(px, py + transform.len(16f), px, py + transform.len(BARREL_LENGTH_U - 10f), strokePaint)
+
+        // A filled receiver seats the peppermint wheel into the cannon body.
+        fillPaint.color = BARREL_BODY
+        fillPaint.alpha = 255
+        canvas.drawCircle(px, py, transform.len(COLLAR_RADIUS_U), fillPaint)
 
         // Peppermint swirl: six alternating wedges, spinning with the aim.
         val swirlRadius = transform.len(SWIRL_RADIUS_U)
@@ -346,6 +372,12 @@ class BoardRenderer {
         strokePaint.alpha = 255
         strokePaint.strokeWidth = transform.len(CUP_RIM_WIDTH_U)
         canvas.drawLine(topLeftX, topY, topRightX, topY, strokePaint)
+
+        // A narrow icing highlight makes the moving catch boundary readable over every world.
+        strokePaint.color = ICING_WHITE
+        strokePaint.alpha = CUP_RIM_HIGHLIGHT_ALPHA
+        strokePaint.strokeWidth = transform.len(CUP_RIM_HIGHLIGHT_WIDTH_U)
+        canvas.drawLine(topLeftX, topY, topRightX, topY, strokePaint)
     }
 
     // -- 10. aim guide ----------------------------------------------------------------------------
@@ -383,6 +415,7 @@ class BoardRenderer {
         board: LevelBoard,
         transform: BoardTransform,
         sprites: SpriteCache,
+        trail: TrailType,
     ) {
         val balls = board.world.balls
         if (balls.isEmpty()) return
@@ -398,6 +431,10 @@ class BoardRenderer {
             point[1] = RenderMath.lerp(ball.prevY, ball.y, alpha)
             val cx = transform.sx(point[0])
             val cy = transform.sy(point[1])
+
+            if (trail != TrailType.NONE) {
+                drawTrail(canvas, transform, cx, cy, ball.vx, ball.vy, trail)
+            }
             rectF.set(cx - half, cy - half, cx + half, cy + half)
 
             val sprite = sprites.ball(ball.skin)
@@ -412,6 +449,39 @@ class BoardRenderer {
         }
     }
 
+    /**
+     * Draws a short velocity-aligned candy streak behind a ball. It needs no history buffer and
+     * allocates nothing: speed chooses direction only, while the board-space ball radius fixes
+     * the trail's visual length so a fast drop cannot paint across half the board.
+     */
+    private fun drawTrail(
+        canvas: Canvas,
+        transform: BoardTransform,
+        cx: Float,
+        cy: Float,
+        vx: Float,
+        vy: Float,
+        trail: TrailType,
+    ) {
+        val speed = sqrt(vx * vx + vy * vy)
+        if (speed < TRAIL_MIN_SPEED_U) return
+        val dx = vx / speed
+        val dy = vy / speed
+        val spacing = transform.len(TRAIL_SPACING_U)
+        val baseRadius = transform.len(TRAIL_RADIUS_U)
+        fillPaint.color = trailArgb(trail)
+        for (step in 1..TRAIL_DOTS) {
+            val fade = TRAIL_DOTS - step + 1
+            fillPaint.alpha = TRAIL_ALPHA * fade / TRAIL_DOTS
+            canvas.drawCircle(
+                cx - dx * spacing * step,
+                cy - dy * spacing * step,
+                baseRadius * fade / TRAIL_DOTS,
+                fillPaint,
+            )
+        }
+    }
+
     // -- fallback palette --------------------------------------------------------------------------
 
     private fun candyArgb(color: CandyColor): Int = when (color) {
@@ -419,6 +489,14 @@ class BoardRenderer {
         CandyColor.PURPLE -> CANDY_PURPLE
         CandyColor.PINK -> CANDY_ROSE
         CandyColor.BLUE -> CANDY_BLUE
+    }
+
+    private fun trailArgb(trail: TrailType): Int = when (trail) {
+        TrailType.NONE -> ICING_WHITE
+        TrailType.GREEN -> CANDY_GREEN
+        TrailType.PURPLE -> CANDY_PURPLE
+        TrailType.PINK -> CANDY_ROSE
+        TrailType.BLUE -> CANDY_BLUE
     }
 }
 
@@ -449,9 +527,13 @@ private const val FRAME_HALO_WIDTH_U = 14f
 private const val FRAME_LINE_WIDTH_U = 4f
 private const val FRAME_HALO_ALPHA = 60
 
-private const val BARREL_LENGTH_U = 85f
-private const val BARREL_WIDTH_U = 34f
-private const val BARREL_EDGE_WIDTH_U = 3f
+private const val BARREL_LENGTH_U = 92f
+private const val BARREL_WIDTH_U = 46f
+private const val BARREL_EDGE_WIDTH_U = 5f
+private const val BARREL_GLOW_U = 22f
+private const val BARREL_GLOW_ALPHA = 145
+private const val BARREL_CORE_WIDTH_U = 6f
+private const val BARREL_CORE_ALPHA = 210
 private const val SWIRL_RADIUS_U = 26f
 private const val SWIRL_WEDGES = 6
 private const val COLLAR_RADIUS_U = 30f
@@ -468,11 +550,19 @@ private const val CUP_BOTTOM_TAPER = 0.72f
 private const val CUP_PLEATS = 7
 private const val CUP_PLEAT_WIDTH_U = 3f
 private const val CUP_PLEAT_ALPHA = 140
-private const val CUP_RIM_WIDTH_U = 6f
-private const val CUP_RIM_GLOW_U = 26f
-private const val CUP_RIM_GLOW_ALPHA = 170
+private const val CUP_RIM_WIDTH_U = 9f
+private const val CUP_RIM_GLOW_U = 38f
+private const val CUP_RIM_GLOW_ALPHA = 220
+private const val CUP_RIM_HIGHLIGHT_WIDTH_U = 3f
+private const val CUP_RIM_HIGHLIGHT_ALPHA = 225
 
 private const val AIM_DOT_RADIUS_U = 4f
 private const val AIM_IMPACT_RADIUS_U = 13f
 private const val AIM_IMPACT_WIDTH_U = 3f
 private const val AIM_IMPACT_ALPHA = 200
+
+private const val TRAIL_DOTS = 4
+private const val TRAIL_SPACING_U = 11f
+private const val TRAIL_RADIUS_U = 7f
+private const val TRAIL_ALPHA = 170
+private const val TRAIL_MIN_SPEED_U = 40f

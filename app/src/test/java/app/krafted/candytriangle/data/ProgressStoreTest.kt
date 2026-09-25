@@ -275,14 +275,11 @@ class ProgressStoreTest {
     // ---------------------------------------------------------------- progress reset
 
     /**
-     * D4's Progress Reset. Everything this store owns goes; the §10 settings flags deliberately
-     * survive, since a player replaying from level 1 did not ask for their music to come back on.
+     * D4's Progress Reset. Everything this store owns goes; the vibration preference survives.
      */
     @Test
     fun resetProgressClearsEverythingItOwnsAndKeepsSettings() = runTest {
         val settings = SettingsStore(preferences)
-        settings.setMusicEnabled(false)
-        settings.setSoundEnabled(false)
         settings.setVibrateEnabled(false)
 
         store.recordLevelResult(levelId = 1, crowns = 3, score = 5_000)
@@ -301,8 +298,6 @@ class ProgressStoreTest {
         assertEquals(0, store.totalCrowns.first())
         assertEquals(setOf(BallSkin.DEFAULT), store.progress.first().unlockedBallSkins())
 
-        assertFalse(settings.musicEnabled.first())
-        assertFalse(settings.soundEnabled.first())
         assertFalse(settings.vibrateEnabled.first())
     }
 

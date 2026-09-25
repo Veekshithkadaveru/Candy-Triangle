@@ -8,24 +8,32 @@ sealed interface GameEvent {
     data class CandyPopped(
         val color: CandyColor,
         val isDirect: Boolean,
-        val points: Int
+        val points: Int,
+        val x: Float = Float.NaN,
+        val y: Float = Float.NaN,
     ) : GameEvent
 
     /** A gem was smashed. */
     data class GemSmashed(
         val gemType: GemType,
-        val points: Int
+        val points: Int,
+        val x: Float = Float.NaN,
+        val y: Float = Float.NaN,
     ) : GameEvent
 
     /** The ball was caught in the cup. */
     data class CupCaught(
-        val points: Int
+        val points: Int,
+        val x: Float = Float.NaN,
+        val y: Float = Float.NaN,
     ) : GameEvent
 
     /** The chain of direct candy hits has advanced. */
     data class ChainAdvanced(
         val color: CandyColor,
-        val length: Int
+        val length: Int,
+        val x: Float = Float.NaN,
+        val y: Float = Float.NaN,
     ) : GameEvent
 
     /** The active drop has ended (all balls exited or caught). */
@@ -61,7 +69,7 @@ sealed interface GameEvent {
     /** A chain reached the Sugar Pop threshold and popped [popped] same-colour candies (§4.1). */
     data class SugarPop(val color: CandyColor, val x: Float, val y: Float, val popped: Int) : GameEvent
 
-    /** A gem's board effect fired at (x, y) — the D5 VFX hook (Blast ring, Line beam, Magnet aura...). */
+    /** A gem's board effect fired at (x, y), for optional presentation feedback. */
     data class GemEffectTriggered(val gemType: GemType, val x: Float, val y: Float, val popped: Int) : GameEvent
 
     /** Sugar Rush bonus applied on completion (§5.1): [balls] remaining × 500. */

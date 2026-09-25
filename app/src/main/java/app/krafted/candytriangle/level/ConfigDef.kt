@@ -280,7 +280,7 @@ data class LauncherDef(
 
 /** The moving Candy Cup below the open base (§3.2 `cupWidth`, §5.1 catch points). */
 data class CupConfig(
-    val cupWidth: Float = 180f,
+    val cupWidth: Float = 210f,
     val catchScore: Int = 100,
     val catchRefundBalls: Int = 1,
     /** World 1 speed; [speedMax] is World 4's. Per-world values live on [WorldDef.cupSpeed]. */

@@ -198,7 +198,7 @@ internal class GameLoop(
             // why every glow is a cached radial-gradient bitmap.
             canvas = holder.lockHardwareCanvas()
             if (canvas == null) return
-            renderer.draw(canvas, board, transform, sprites, pegTintArgb, aimPath, showAim)
+            renderer.draw(canvas, board, transform, sprites, pegTintArgb, aimPath, showAim, channel.trail)
         } catch (dropped: RuntimeException) {
             // §13 is zero crash tolerance, and every way a frame can fail is a RuntimeException a
             // dropped frame survives: an IllegalStateException from a surface that went away

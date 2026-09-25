@@ -18,7 +18,7 @@ sealed interface JarReward {
     /** Tier 1. Note the Pink jar awards [BallSkin.GOLD] — §7, deliberate. */
     data class Skin(val skin: BallSkin) : JarReward
 
-    /** Tier 2. Persisted and unlocked in D2; **nothing draws a trail until D5**. */
+    /** Tier 2. Persisted here and drawn behind active balls by the board renderer. */
     data class Trail(val trail: TrailType) : JarReward
 
     /** Tier 3. [levelId] is 101..104 in the single [app.krafted.candytriangle.level.LevelIds]

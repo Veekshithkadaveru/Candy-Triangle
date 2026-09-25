@@ -1,6 +1,7 @@
 package app.krafted.candytriangle.ui.board
 
 import app.krafted.candytriangle.level.BallSkin
+import app.krafted.candytriangle.level.TrailType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -122,6 +123,13 @@ class GameCommandChannelTest {
         assertEquals(BallSkin.GOLD, channel.ballSkin)
     }
 
+    @Test
+    fun `trail defaults to NONE and round-trips`() {
+        assertEquals(TrailType.NONE, channel.trail)
+        channel.trail = TrailType.PINK
+        assertEquals(TrailType.PINK, channel.trail)
+    }
+
     // -- reset ------------------------------------------------------------------------------------
 
     @Test
@@ -143,9 +151,11 @@ class GameCommandChannelTest {
     fun `reset leaves ViewModel-owned state alone`() {
         channel.paused = true
         channel.ballSkin = BallSkin.BLUE
+        channel.trail = TrailType.BLUE
         channel.reset()
         assertTrue("reset must not silently un-pause a level", channel.paused)
         assertEquals("reset must not drop the equipped skin", BallSkin.BLUE, channel.ballSkin)
+        assertEquals("reset must not drop the equipped trail", TrailType.BLUE, channel.trail)
     }
 
     // -- concurrency --------------------------------------------------------------------------------

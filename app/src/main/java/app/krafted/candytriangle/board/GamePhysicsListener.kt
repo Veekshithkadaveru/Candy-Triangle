@@ -59,7 +59,7 @@ class GamePhysicsListener(
         boardState.registerGemBreak(gem)
         peg.active = false // The engine ignores this collider from now on.
 
-        session.onGemSmashed(gem.type, boardState)
+        session.onGemSmashed(gem.type, boardState, gem.x, gem.y)
         chainTracker.onGemHit()
 
         val effect = config.gem(gem.type)?.effect ?: GemEffect.None
@@ -100,7 +100,14 @@ class GamePhysicsListener(
             candy.active = false
             popped++
             val chainResult = chainTracker.onCandyPopped(candy, direct = false)
-            session.onCandyPopped(candy.color, isDirect = false, chainPosition = chainResult.chainLength, boardState = boardState)
+            session.onCandyPopped(
+                candy.color,
+                isDirect = false,
+                chainPosition = chainResult.chainLength,
+                boardState = boardState,
+                x = candy.x,
+                y = candy.y,
+            )
         }
 
         // A Sugar Storm past its per-level cap fires no effect, so it gets no VFX event either.
@@ -135,7 +142,11 @@ class GamePhysicsListener(
             if (ball.y >= cupLaneTop && ball.y <= cupLaneBottom && cup.checkCatch(ball)) {
                 val sizeBefore = balls.size
                 world.removeBall(ball) // Fires no onBallExited, so the session is told here.
-                session.onCupCaught(boardState)
+                session.onCupCaught(
+                    boardState,
+                    x = ball.x,
+                    y = (cupLaneTop + cupLaneBottom) * 0.5f,
+                )
                 session.onBallExited(boardState, chainTracker)
                 if (balls.size == sizeBefore) i++
                 continue
@@ -164,10 +175,23 @@ class GamePhysicsListener(
             candy.active = false
             val direct = chainTracker.countsAsDirect(touched = true, magnetPulled = candy.magnetPulled)
             val chainResult = chainTracker.onCandyPopped(candy, direct)
-            session.onCandyPopped(candy.color, isDirect = direct, chainPosition = chainResult.chainLength, boardState = boardState)
+            session.onCandyPopped(
+                candy.color,
+                isDirect = direct,
+                chainPosition = chainResult.chainLength,
+                boardState = boardState,
+                x = candy.x,
+                y = candy.y,
+            )
 
             if (chainResult.extended && chainResult.chainLength > 1) {
-                session.onChainAdvanced(candy.color, chainResult.chainLength, boardState)
+                session.onChainAdvanced(
+                    candy.color,
+                    chainResult.chainLength,
+                    boardState,
+                    candy.x,
+                    candy.y,
+                )
             }
 
             if (chainResult.triggerSugarPop) sugarPop(candy)
@@ -192,7 +216,14 @@ class GamePhysicsListener(
             if (dx * dx + dy * dy > radiusSq) continue
             c.active = false
             popped++
-            session.onCandyPopped(c.color, isDirect = false, chainPosition = 0, boardState = boardState)
+            session.onCandyPopped(
+                c.color,
+                isDirect = false,
+                chainPosition = 0,
+                boardState = boardState,
+                x = c.x,
+                y = c.y,
+            )
         }
         session.onSugarPop(trigger.color, trigger.x, trigger.y, popped)
     }

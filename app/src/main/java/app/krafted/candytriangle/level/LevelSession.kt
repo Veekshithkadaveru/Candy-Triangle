@@ -121,7 +121,14 @@ class LevelSession(
      * A candy left the board. Direct hits score `directCandyPointsPerChainPosition × chainPosition`
      * capped at `directCandyPointsCap`; effect pops score `poppedCandyPoints` flat (§5.1).
      */
-    fun onCandyPopped(color: CandyColor, isDirect: Boolean, chainPosition: Int, boardState: BoardState) {
+    fun onCandyPopped(
+        color: CandyColor,
+        isDirect: Boolean,
+        chainPosition: Int,
+        boardState: BoardState,
+        x: Float = Float.NaN,
+        y: Float = Float.NaN,
+    ) {
         val points = if (isDirect) {
             (chainPosition * scoring.directCandyPointsPerChainPosition).coerceAtMost(scoring.directCandyPointsCap)
         } else {
@@ -131,39 +138,54 @@ class LevelSession(
         dropSubtotal += points
         collectedCounts[color.ordinal]++
 
-        val event = GameEvent.CandyPopped(color, isDirect, points)
+        val event = GameEvent.CandyPopped(color, isDirect, points, x, y)
         _events.tryEmit(event)
 
         objectiveTracker.processEvent(event)
         _events.tryEmit(GameEvent.ObjectiveProgressUpdated)
     }
 
-    fun onGemSmashed(gemType: GemType, boardState: BoardState) {
+    fun onGemSmashed(
+        gemType: GemType,
+        boardState: BoardState,
+        x: Float = Float.NaN,
+        y: Float = Float.NaN,
+    ) {
         val points = scoring.gemBrokenPoints
         dropSubtotal += points
 
-        val event = GameEvent.GemSmashed(gemType, points)
+        val event = GameEvent.GemSmashed(gemType, points, x, y)
         _events.tryEmit(event)
 
         objectiveTracker.processEvent(event)
         _events.tryEmit(GameEvent.ObjectiveProgressUpdated)
     }
 
-    fun onCupCaught(boardState: BoardState) {
+    fun onCupCaught(
+        boardState: BoardState,
+        x: Float = Float.NaN,
+        y: Float = Float.NaN,
+    ) {
         val points = scoring.cupCatchPoints
         dropSubtotal += points
         // §2: a catch refunds `cup.catchRefundBalls` (1 by default); a negative value refunds none.
         remainingBalls += cup.catchRefundBalls.coerceAtLeast(0)
 
-        val event = GameEvent.CupCaught(points)
+        val event = GameEvent.CupCaught(points, x, y)
         _events.tryEmit(event)
 
         objectiveTracker.processEvent(event)
         _events.tryEmit(GameEvent.ObjectiveProgressUpdated)
     }
 
-    fun onChainAdvanced(color: CandyColor, length: Int, boardState: BoardState) {
-        val event = GameEvent.ChainAdvanced(color, length)
+    fun onChainAdvanced(
+        color: CandyColor,
+        length: Int,
+        boardState: BoardState,
+        x: Float = Float.NaN,
+        y: Float = Float.NaN,
+    ) {
+        val event = GameEvent.ChainAdvanced(color, length, x, y)
         _events.tryEmit(event)
 
         objectiveTracker.processEvent(event)
@@ -180,7 +202,7 @@ class LevelSession(
 
     /**
      * A gem's §4.2 board effect fired at ([x], [y]), popping [popped] candies (already scored
-     * through [onCandyPopped]). The D5 VFX hook.
+     * through [onCandyPopped]). This event is the presentation-layer effect hook.
      */
     fun onGemEffectTriggered(gemType: GemType, x: Float, y: Float, popped: Int) {
         _events.tryEmit(GameEvent.GemEffectTriggered(gemType, x, y, popped))

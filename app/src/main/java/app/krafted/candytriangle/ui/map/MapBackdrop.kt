@@ -52,7 +52,7 @@ import kotlin.math.roundToInt
 
 private const val TAG = "MapBackdrop"
 
-/** How long a decoded backdrop takes to fade in over its placeholder. */
+/** How long a decoded backdrop takes to fade in over its loading background. */
 private const val BACKDROP_FADE_MILLIS = 280
 
 /**
@@ -85,7 +85,7 @@ private val MapDecodeDispatcher: CoroutineDispatcher = Dispatchers.IO.limitedPar
  * with no cache shared between call sites. For a 1080 x 1920 backdrop that is an 8.3 MB decode in
  * the middle of a fling, every time a slice scrolls in. Here the decode runs on
  * [MapDecodeDispatcher], sub-sampled to the laid-out size by [MapBackdropMath.sampleSize], and a
- * gradient placeholder stands in until it lands.
+ * loading gradient stands in until it lands.
  *
  * ## Memory (§13)
  *
@@ -114,7 +114,7 @@ internal fun MapBackdrop(
     )
     Spacer(
         modifier = modifier.drawWithCache {
-            val placeholder = Brush.verticalGradient(listOf(NightSurface, NightVoid))
+            val loadingBackdrop = Brush.verticalGradient(listOf(NightSurface, NightVoid))
             val dstSize = IntSize(size.width.roundToInt(), size.height.roundToInt())
             // Centre-crop rather than stretch: the art is 0.5625 like the slice, but a retouched
             // backdrop of another shape should crop, never distort.
@@ -122,7 +122,7 @@ internal fun MapBackdrop(
                 RenderMath.centreCrop(it.width, it.height, dstSize.width, dstSize.height, IntArray(4))
             }
             onDrawBehind {
-                drawRect(placeholder)
+                drawRect(loadingBackdrop)
                 if (image != null && crop != null) {
                     drawImage(
                         image = image,

@@ -1,6 +1,7 @@
 package app.krafted.candytriangle.ui.board
 
 import app.krafted.candytriangle.level.BallSkin
+import app.krafted.candytriangle.level.TrailType
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
@@ -55,6 +56,10 @@ class GameCommandChannel {
     @Volatile
     var ballSkin: BallSkin = BallSkin.DEFAULT
 
+    /** The equipped candy trail, sampled by the renderer once per frame. */
+    @Volatile
+    var trail: TrailType = TrailType.NONE
+
     /**
      * The pending aim as raw float bits, or [NO_AIM_BITS] when there is nothing to consume.
      *
@@ -103,9 +108,9 @@ class GameCommandChannel {
      * Clears every pending command. Called when a board is attached or detached.
      *
      * Clears the pending aim, the pending launch, [launchRefusals] and [aiming] — the transient
-     * state of one gesture on one board. Deliberately leaves [paused] and [ballSkin] alone: those
+     * state of one gesture on one board. Deliberately leaves [paused], [ballSkin], and [trail] alone: those
      * are ViewModel-owned session state, and a `reset()` that silently un-paused a level, or
-     * dropped the equipped skin back to `DEFAULT`, would be a bug.
+     * dropped an equipped cosmetic, would be a bug.
      */
     fun reset() {
         aimBits.set(NO_AIM_BITS)

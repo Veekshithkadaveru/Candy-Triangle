@@ -197,6 +197,11 @@ class HudStateMapper(private val board: LevelBoard) {
             score = session.totalScore,
             ballsRemaining = session.remainingBalls,
             collected = session.collectedByColor,
+            sugarRushBonus = if (won) {
+                session.remainingBalls * board.config.scoring.sugarRushPointsPerRemainingBall
+            } else {
+                0
+            },
         )
     }
 

@@ -9,9 +9,13 @@ import app.krafted.candytriangle.level.CandyColor
 import app.krafted.candytriangle.level.CrownCalculator
 import app.krafted.candytriangle.level.DEFAULT_WORLDS
 import app.krafted.candytriangle.level.GameConfig
+import app.krafted.candytriangle.level.GemType
 import app.krafted.candytriangle.level.LevelRepository
+import app.krafted.candytriangle.level.TrailType
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -74,13 +78,15 @@ class GameViewModelTest {
     }
 
     @Test
-    fun equippedSkinIsOnTheChannelBeforeTheBoardIsReachable() = runTest {
+    fun equippedCosmeticsAreOnTheChannelBeforeTheBoardIsReachable() = runTest {
         progressStore.equipBallSkin(BallSkin.GOLD)
+        progressStore.equipTrail(TrailType.PINK)
 
         val viewModel = newViewModel(levelId = 1)
         viewModel.awaitReady()
 
         assertEquals(BallSkin.GOLD, viewModel.channel.ballSkin)
+        assertEquals(TrailType.PINK, viewModel.channel.trail)
     }
 
     /**
@@ -141,6 +147,63 @@ class GameViewModelTest {
         assertTrue(first === viewModel.hud.value)
     }
 
+    @Test
+    fun candyFeedbackCarriesTheCollisionPositionAndColor() = runTest {
+        val viewModel = newViewModel(levelId = 1)
+        val ready = viewModel.awaitReady()
+        val cue = async(start = CoroutineStart.UNDISPATCHED) {
+            viewModel.feedback.first { it.type == GameFeedbackType.CANDY }
+        }
+
+        ready.board.session.onCandyPopped(
+            color = CandyColor.PINK,
+            isDirect = true,
+            chainPosition = 2,
+            boardState = ready.board.boardState,
+            x = 412f,
+            y = 638f,
+        )
+
+        with(cue.await()) {
+            assertEquals(GameFeedbackType.CANDY, type)
+            assertEquals(CandyColor.PINK, candyColor)
+            assertEquals(412f, x, 0f)
+            assertEquals(638f, y, 0f)
+            assertTrue(sequence > 0L)
+        }
+    }
+
+    @Test
+    fun completingAnObjectiveEmitsOneObjectiveFeedbackCue() = runTest {
+        val viewModel = newViewModel(levelId = 1)
+        val ready = viewModel.awaitReady()
+        val board = ready.board
+
+        // Prime the completion edge detector with the untouched objective state.
+        viewModel.onFrame(board, FRAME_NANOS, stepsRun = 0)
+        val cue = async(start = CoroutineStart.UNDISPATCHED) {
+            viewModel.feedback.first { it.type == GameFeedbackType.OBJECTIVE }
+        }
+
+        assertNotNull(board.launch(0f))
+        board.session.onCandyPopped(
+            color = CandyColor.PINK,
+            isDirect = true,
+            chainPosition = 1,
+            boardState = board.boardState,
+            x = 500f,
+            y = 500f,
+        )
+        board.session.onBallExited(board.boardState, board.chainTracker)
+        viewModel.onFrame(board, FRAME_NANOS, stepsRun = 1)
+
+        with(cue.await()) {
+            assertEquals(GameFeedbackType.OBJECTIVE, type)
+            assertEquals(1, amount)
+            assertTrue(sequence > 0L)
+        }
+    }
+
     // ------------------------------------------------------------------ D1-b: the result write
 
     @Test
@@ -162,6 +225,10 @@ class GameViewModelTest {
         assertNotNull(outcome)
         assertTrue(outcome!!.won)
         assertEquals(expectedCrowns, outcome.crowns)
+        assertEquals(
+            outcome.ballsRemaining * GameConfig.DEFAULTS.scoring.sugarRushPointsPerRemainingBall,
+            outcome.sugarRushBonus,
+        )
     }
 
     @Test
@@ -266,6 +333,25 @@ class GameViewModelTest {
         viewModel.resume()
 
         assertTrue("the board must stay frozen once the attempt is over", viewModel.channel.paused)
+    }
+
+    // ------------------------------------------------------------------ D4: one-time gem education
+
+    @Test
+    fun anIntroducedGemIsShownOnceAndPersistedWhenDismissed() = runTest {
+        val first = newViewModel(levelId = 3, levelsJson = GEM_INTRO_LEVELS_JSON)
+        first.awaitReady()
+
+        assertEquals(GemType.SWEET, first.gemIntro.value)
+        first.dismissGemIntro()
+        dispatcher.scheduler.advanceUntilIdle()
+
+        assertNull(first.gemIntro.value)
+        assertTrue(GemType.SWEET in progressStore.progress.first().seenGemIntros)
+
+        val replay = newViewModel(levelId = 3, levelsJson = GEM_INTRO_LEVELS_JSON)
+        replay.awaitReady()
+        assertNull("a persisted gem lesson must not interrupt a replay", replay.gemIntro.value)
     }
 
     // ------------------------------------------------------------------ D3: the world a board is drawn in
@@ -453,6 +539,23 @@ class GameViewModelTest {
                   "candies": { "seed": 7, "count": 0, "weights": { "PINK": 1 } },
                   "gems": [], "cup": { "speed": 200 },
                   "objectives": [ { "type": "SCORE", "score": 7500 } ]
+                }
+              ]
+            }
+        """.trimIndent()
+
+        /** Sweet Gem's default intro level is 3, and the gem is physically present on this board. */
+        val GEM_INTRO_LEVELS_JSON = """
+            {
+              "schemaVersion": 1,
+              "levels": [
+                {
+                  "id": 3, "world": 1, "balls": 3, "crowns": [1, 2],
+                  "layout": { "spacing": 80, "pattern": "CLUSTERS", "clusters": [] },
+                  "candies": { "seed": 7, "count": 0, "weights": { "PINK": 1 } },
+                  "gems": [ { "type": "SWEET", "row": 4, "col": 2 } ],
+                  "cup": { "speed": 200 },
+                  "objectives": [ { "type": "SCORE", "score": 10 } ]
                 }
               ]
             }

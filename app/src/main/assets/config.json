@@ -68,7 +68,7 @@
     }
   },
   "cup": {
-    "cupWidth": 180,
+    "cupWidth": 210,
     "catchScore": 100,
     "catchRefundBalls": 1,
     "speedMin": 200,

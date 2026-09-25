@@ -39,10 +39,13 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.krafted.candytriangle.R
+import app.krafted.candytriangle.appContainer
+import app.krafted.candytriangle.data.GameSettings
 import app.krafted.candytriangle.ui.board.AimMath
 import app.krafted.candytriangle.ui.board.BoardTransform
 import app.krafted.candytriangle.ui.board.GameCommandChannel
 import app.krafted.candytriangle.ui.board.GameSurfaceView
+import app.krafted.candytriangle.ui.intro.GemIntroDialog
 import app.krafted.candytriangle.ui.theme.CandyPink
 import app.krafted.candytriangle.ui.theme.CandyTriangleTheme
 import app.krafted.candytriangle.ui.theme.IcingDim
@@ -57,9 +60,8 @@ import app.krafted.candytriangle.ui.theme.StatusError
  * `onCleared()` — which is what stops the game thread and releases the `LevelBoard`.
  *
  * [onLevelFinished] fires exactly once per attempt, after `GameViewModel` has already written the
- * result through `ProgressStore.recordLevelResult` and `bankCandies` (D1 deviation D1-b: **D4's
- * results screen displays what D1 wrote, it must not bank again**). Its parameters are primitives
- * on purpose, so the navigation graph does not need a shared result type.
+ * result through `ProgressStore.recordLevelResult` and `bankCandies`. The immutable outcome is
+ * handed to navigation for display only; a results screen must never bank it again.
  *
  * Owner: Agent 2 (`ui/game`).
  */
@@ -67,7 +69,7 @@ import app.krafted.candytriangle.ui.theme.StatusError
 fun GameScreen(
     levelId: Int,
     onExit: () -> Unit,
-    onLevelFinished: (levelId: Int, won: Boolean, crowns: Int, score: Int) -> Unit,
+    onLevelFinished: (LevelOutcome) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val application = LocalContext.current.applicationContext
@@ -75,8 +77,12 @@ fun GameScreen(
         key = "game-$levelId",
         factory = remember(application, levelId) { GameViewModel.factory(application, levelId) },
     )
+    val settings by application.appContainer.settingsStore.settings.collectAsStateWithLifecycle(
+        initialValue = GameSettings(),
+    )
     GameScreenContent(
         viewModel = gameViewModel,
+        settings = settings,
         onExit = onExit,
         onLevelFinished = onLevelFinished,
         modifier = modifier,
@@ -98,8 +104,9 @@ fun GameScreen(
 @Composable
 private fun GameScreenContent(
     viewModel: GameViewModel,
+    settings: GameSettings,
     onExit: () -> Unit,
-    onLevelFinished: (levelId: Int, won: Boolean, crowns: Int, score: Int) -> Unit,
+    onLevelFinished: (LevelOutcome) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -108,6 +115,7 @@ private fun GameScreenContent(
     val chainCue by viewModel.chainBanner.collectAsStateWithLifecycle()
     val dropFlash by viewModel.dropFlash.collectAsStateWithLifecycle()
     val finished by viewModel.finished.collectAsStateWithLifecycle()
+    val gemIntro by viewModel.gemIntro.collectAsStateWithLifecycle()
 
     val ready = uiState as? GameUiState.Ready
     val density = LocalDensity.current
@@ -142,7 +150,7 @@ private fun GameScreenContent(
     LaunchedEffect(finished) {
         if (finished == null) return@LaunchedEffect
         val outcome = viewModel.consumeFinished() ?: return@LaunchedEffect
-        onLevelFinished(outcome.levelId, outcome.won, outcome.crowns, outcome.score)
+        onLevelFinished(outcome)
     }
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -161,7 +169,7 @@ private fun GameScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .aimGestures(
-                    enabled = ready != null && !paused && finished == null,
+                    enabled = ready != null && !paused && finished == null && gemIntro == null,
                     transform = transform,
                     channel = viewModel.channel,
                     pivotX = ready?.pivotX ?: 0f,
@@ -193,7 +201,7 @@ private fun GameScreenContent(
 
         PauseButton(
             onClick = viewModel::pause,
-            enabled = ready != null && !paused && finished == null,
+            enabled = ready != null && !paused && finished == null && gemIntro == null,
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .statusBarsPadding()
@@ -205,6 +213,12 @@ private fun GameScreenContent(
             modifier = Modifier
                 .align(Alignment.Center)
                 .padding(horizontal = 24.dp),
+        )
+
+        GameFeedbackOverlay(
+            feedback = viewModel.feedback,
+            transform = transform,
+            vibrationEnabled = settings.vibrateEnabled,
         )
 
         when (val state = uiState) {
@@ -219,6 +233,10 @@ private fun GameScreenContent(
                 onRestart = viewModel::restart,
                 onQuit = onExit,
             )
+        } else {
+            gemIntro?.let { gem ->
+                GemIntroDialog(gem = gem, onContinue = viewModel::dismissGemIntro)
+            }
         }
     }
 }

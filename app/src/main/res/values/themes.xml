@@ -33,4 +33,7 @@
         <item name="android:windowContentTransitions">false</item>
     </style>
 
+    <!-- Pre-Android 12 alias. API 31+ adds branded system-splash attributes in values-v31. -->
+    <style name="Theme.CandyTriangle.Splash" parent="Theme.CandyTriangle" />
+
 </resources>

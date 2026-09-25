@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copy owned by D4's splash, home, results, settings, and one-time gem lessons. -->
+<resources>
+
+    <!-- Splash and home -->
+    <string name="splash_tagline">AIM · BOUNCE · COLLECT</string>
+    <string name="splash_loading">Mixing the candy…</string>
+    <string name="home_tagline">Drop the ball. Build the sweetest chain.</string>
+
+    <!-- Results -->
+    <string name="result_complete_title">Sugar Rush!</string>
+    <string name="result_complete_message">Goals complete. Your candies are already safe in the Jar.</string>
+    <string name="result_failed_title">So Close!</string>
+    <string name="result_failed_message">No balls left, but every candy you collected was still banked.</string>
+    <string name="result_sugar_rush">Sugar Rush · %1$d balls left · +%2$d</string>
+    <string name="result_banked_title">Candies banked</string>
+    <string name="result_no_candies">No candies collected this time</string>
+    <string name="result_replay">Replay level</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_feedback">Feedback</string>
+    <string name="settings_section_game">Game</string>
+    <string name="settings_reset_progress">Reset progress</string>
+    <string name="settings_reset_title">Reset all progress?</string>
+    <string name="settings_reset_message">Crowns, scores, Candy Jar totals, cosmetics, and gem lessons will be erased. Your vibration choice will stay the same.</string>
+    <string name="settings_reset_confirm">Reset everything</string>
+
+    <!-- One-time gem education -->
+    <string name="gem_intro_new">New gem discovered</string>
+    <string name="gem_intro_multiplier">Drop multiplier ×%1$d</string>
+    <string name="gem_intro_action">Got it — play</string>
+    <string name="gem_intro_sweet">Break it to sweeten the whole drop with a ×5 multiplier.</string>
+    <string name="gem_intro_blast">Detonates a wide ring and pops nearby candies when it breaks.</string>
+    <string name="gem_intro_line">Fires a horizontal beam that clears candies across its row.</string>
+    <string name="gem_intro_split">Creates an extra ball with mirrored motion for a two-ball finish.</string>
+    <string name="gem_intro_extra_ball">Adds one ball back to your launcher as soon as it breaks.</string>
+    <string name="gem_intro_magnet">Pulls nearby candies toward the active ball for a short time.</string>
+    <string name="gem_intro_sugar_storm">Pops every candy in the most common remaining colour.</string>
+
+</resources>

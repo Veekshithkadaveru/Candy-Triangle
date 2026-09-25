@@ -100,7 +100,7 @@ class ConfigLoaderTest {
         assertF("restitutionWall", 0.50f, p.restitutionWall)
         assertF("tangentialDamping", 0.98f, p.tangentialDamping)
         assertF("physicsStepMs", 4.1667f, p.physicsStepMs)
-        assertF("cupWidth", 180f, loader().config().cup.cupWidth)
+        assertF("cupWidth", 210f, loader().config().cup.cupWidth)
     }
 
     @Test

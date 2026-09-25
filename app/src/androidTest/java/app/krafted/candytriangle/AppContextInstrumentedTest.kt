@@ -6,13 +6,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/**
- * Placeholder smoke test proving the instrumented source set compiles and runs on-device.
- *
- * The real on-device QA pass is D6; the automated verification suite (§11) is JVM-only.
- */
+/** Verifies that the installed application exposes the expected package context on-device. */
 @RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
+class AppContextInstrumentedTest {
     @Test
     fun appContextHasExpectedPackage() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext

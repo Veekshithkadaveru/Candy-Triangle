@@ -137,7 +137,7 @@ data class LevelMapUiState(
     val currentLevelId: Int,
     /** 0-based index into [slices] of the slice holding [currentLevelId] — where the map opens. */
     val currentSliceIndex: Int,
-    /** False only for the placeholder shown before the first DataStore read lands, so the screen
+    /** False only for the provisional state before the first DataStore read lands, so the screen
      *  knows not to auto-scroll to a "current level" that is really just the fresh-install default. */
     val loaded: Boolean = true,
 ) {

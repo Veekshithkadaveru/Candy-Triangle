@@ -31,8 +31,6 @@
     <string name="label_locked">Locked</string>
     <string name="label_on">On</string>
     <string name="label_off">Off</string>
-    <string name="label_sound">Sound</string>
-    <string name="label_music">Music</string>
     <string name="label_vibration">Vibration</string>
 
     <!-- ============ Worlds (PRD §6.1) ============ -->

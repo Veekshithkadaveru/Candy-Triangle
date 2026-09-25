@@ -1,7 +1,9 @@
 package app.krafted.candytriangle.ui.game
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -129,6 +132,11 @@ fun ObjectiveHeader(
 
 @Composable
 private fun ObjectiveRow(objective: HudObjective, modifier: Modifier = Modifier) {
+    val animatedFraction by animateFloatAsState(
+        targetValue = objective.fraction,
+        animationSpec = tween(durationMillis = 420, easing = FastOutSlowInEasing),
+        label = "Objective progress",
+    )
     val label = objective.label()
     val progress = stringResource(
         R.string.game_objective_progress,
@@ -159,7 +167,7 @@ private fun ObjectiveRow(objective: HudObjective, modifier: Modifier = Modifier)
         }
         Spacer(Modifier.height(4.dp))
         LinearProgressIndicator(
-            progress = { objective.fraction },
+            progress = { animatedFraction },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(5.dp),

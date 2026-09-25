@@ -11,8 +11,10 @@ import app.krafted.candytriangle.board.LevelBoard
 import app.krafted.candytriangle.data.ConfigLoader
 import app.krafted.candytriangle.data.ProgressStore
 import app.krafted.candytriangle.level.BallSkin
+import app.krafted.candytriangle.level.CandyColor
 import app.krafted.candytriangle.level.GameConfig
 import app.krafted.candytriangle.level.GameEvent
+import app.krafted.candytriangle.level.GemType
 import app.krafted.candytriangle.level.LevelDef
 import app.krafted.candytriangle.level.LevelIds
 import app.krafted.candytriangle.level.LevelRepository
@@ -24,13 +26,18 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.atomic.AtomicLong
 
 /** What `GameScreen` is showing: still loading, playable, or unloadable. */
 sealed interface GameUiState {
@@ -135,9 +142,19 @@ class GameViewModel(
     private val _dropFlash = MutableStateFlow<DropFlash?>(null)
     val dropFlash: StateFlow<DropFlash?> = _dropFlash.asStateFlow()
 
+    private val _feedback = MutableSharedFlow<GameFeedbackCue>(
+        extraBufferCapacity = 64,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
+    val feedback: SharedFlow<GameFeedbackCue> = _feedback.asSharedFlow()
+
     /** Set once per attempt, after the result has been persisted. See [consumeFinished]. */
     private val _finished = MutableStateFlow<LevelOutcome?>(null)
     val finished: StateFlow<LevelOutcome?> = _finished.asStateFlow()
+
+    /** The head of the one-time mechanic education queue, if this level introduces a gem. */
+    private val _gemIntro = MutableStateFlow<GemType?>(null)
+    val gemIntro: StateFlow<GemType?> = _gemIntro.asStateFlow()
 
     /** Written on the main thread, read on the game thread. */
     @Volatile
@@ -153,7 +170,12 @@ class GameViewModel(
     private var bankCandiesOnFailedLevels = true
     private var generation = 0
     private var bannerSequence = 0L
+    private val feedbackSequence = AtomicLong()
     private var finishedDelivered = false
+    private var objectiveFeedbackReady = false
+    private var objectiveCompletions = BooleanArray(0)
+    private val pendingGemIntros = ArrayDeque<GemType>()
+    private var gemIntroDismissInFlight = false
 
     init {
         viewModelScope.launch { load() }
@@ -167,8 +189,20 @@ class GameViewModel(
                 val resolvedConfig = configLoader.config()
                 val resolvedLevel = levelRepository.level(levelId)
                     ?: return@withContext null
-                val skin = progressStore.equippedBallSkin.first()
-                Prepared(resolvedConfig, resolvedLevel, LevelBoard.create(resolvedLevel, resolvedConfig), skin)
+                val progress = progressStore.progress.first()
+                val newGems = GemType.entries.filter { type ->
+                    resolvedLevel.gems.any { it.type == type } &&
+                        (resolvedConfig.gem(type)?.introLevel ?: type.introLevel) == resolvedLevel.id &&
+                        type !in progress.seenGemIntros
+                }
+                Prepared(
+                    resolvedConfig,
+                    resolvedLevel,
+                    LevelBoard.create(resolvedLevel, resolvedConfig),
+                    progress.equippedBallSkin,
+                    progress.equippedTrail,
+                    newGems,
+                )
             }
         } catch (cancelled: CancellationException) {
             throw cancelled
@@ -187,7 +221,7 @@ class GameViewModel(
         config = prepared.config
         level = prepared.level
         bankCandiesOnFailedLevels = prepared.config.jar.bankCandiesOnFailedLevels
-        publish(prepared.board, prepared.skin)
+        publish(prepared.board, prepared.skin, prepared.trail, prepared.newGems)
     }
 
     /**
@@ -199,11 +233,24 @@ class GameViewModel(
      * the collector is actually subscribed. Publishing first would lose every event emitted
      * between the two.
      */
-    private suspend fun publish(board: LevelBoard, skin: BallSkin) {
+    private suspend fun publish(
+        board: LevelBoard,
+        skin: BallSkin,
+        trail: app.krafted.candytriangle.level.TrailType,
+        newGems: List<GemType> = emptyList(),
+    ) {
         mapper = HudStateMapper(board)
         terminalConsumed = false
+        objectiveFeedbackReady = false
+        objectiveCompletions = BooleanArray(board.level.objectives.size)
         startCollectingEvents(board.session)
+        if (newGems.isNotEmpty()) {
+            pendingGemIntros.clear()
+            pendingGemIntros.addAll(newGems)
+            _gemIntro.value = pendingGemIntros.firstOrNull()
+        }
         channel.ballSkin = skin
+        channel.trail = trail
         channel.paused = false
         _paused.value = false
         generation++
@@ -242,15 +289,53 @@ class GameViewModel(
      * Score, balls, objective progress and the win/fail decision are **never** reconstructed here:
      * `events` is a no-replay `MutableSharedFlow` with `DROP_OLDEST`, so a Sugar Storm can drop
      * hundreds of `CandyPopped`s. Those numbers come from the session's fields via
-     * [HudStateMapper]. D5 takes this hook for VFX and audio.
+     * [HudStateMapper]. Presentation feedback may observe the same hook without owning game state.
      */
     private fun onGameEvent(event: GameEvent) {
         when (event) {
-            is GameEvent.ChainAdvanced ->
-                _chainBanner.value = ChainCue(event.color, event.length, sugarPop = false, sequence = ++bannerSequence)
+            is GameEvent.CandyPopped -> if (event.isDirect) {
+                emitFeedback(
+                    type = GameFeedbackType.CANDY,
+                    x = event.x,
+                    y = event.y,
+                    candyColor = event.color,
+                )
+            }
 
-            is GameEvent.SugarPop ->
+            is GameEvent.GemSmashed -> emitFeedback(
+                type = GameFeedbackType.GEM,
+                x = event.x,
+                y = event.y,
+                gemType = event.gemType,
+            )
+
+            is GameEvent.CupCaught -> emitFeedback(
+                type = GameFeedbackType.CUP,
+                x = event.x,
+                y = event.y,
+            )
+
+            is GameEvent.ChainAdvanced -> {
+                _chainBanner.value = ChainCue(event.color, event.length, sugarPop = false, sequence = ++bannerSequence)
+                emitFeedback(
+                    type = GameFeedbackType.CHAIN,
+                    x = event.x,
+                    y = event.y,
+                    candyColor = event.color,
+                    amount = event.length,
+                )
+            }
+
+            is GameEvent.SugarPop -> {
                 _chainBanner.value = ChainCue(event.color, event.popped, sugarPop = true, sequence = ++bannerSequence)
+                emitFeedback(
+                    type = GameFeedbackType.CHAIN,
+                    x = event.x,
+                    y = event.y,
+                    candyColor = event.color,
+                    amount = event.popped.coerceAtLeast(3),
+                )
+            }
 
             is GameEvent.DropCompleted ->
                 _dropFlash.value = DropFlash(event.dropScore, event.dropMultiplier, ++bannerSequence)
@@ -264,6 +349,27 @@ class GameViewModel(
         }
     }
 
+    private fun emitFeedback(
+        type: GameFeedbackType,
+        x: Float = Float.NaN,
+        y: Float = Float.NaN,
+        candyColor: CandyColor? = null,
+        gemType: GemType? = null,
+        amount: Int = 1,
+    ) {
+        _feedback.tryEmit(
+            GameFeedbackCue(
+                type = type,
+                x = x,
+                y = y,
+                candyColor = candyColor,
+                gemType = gemType,
+                amount = amount,
+                sequence = feedbackSequence.incrementAndGet(),
+            ),
+        )
+    }
+
     // ------------------------------------------------------------------ game thread
 
     /**
@@ -274,7 +380,10 @@ class GameViewModel(
      */
     override fun onFrame(board: LevelBoard, frameNanos: Long, stepsRun: Int) {
         val snapshotMapper = mapper ?: return
-        snapshotMapper.update(launchRefusalsOf(channel))?.let { _hud.value = it }
+        snapshotMapper.update(launchRefusalsOf(channel))?.let { snapshot ->
+            publishObjectiveFeedback(snapshot)
+            _hud.value = snapshot
+        }
 
         if (terminalConsumed || !snapshotMapper.isTerminal) return
         terminalConsumed = true
@@ -285,6 +394,24 @@ class GameViewModel(
         // keeps its last posted buffer, so the board freezes for free.
         channel.paused = true
         viewModelScope.launch { commit(outcome) }
+    }
+
+    private fun publishObjectiveFeedback(snapshot: HudState) {
+        if (!objectiveFeedbackReady) {
+            objectiveCompletions = BooleanArray(snapshot.objectives.size) { snapshot.objectives[it].complete }
+            objectiveFeedbackReady = true
+            return
+        }
+        if (objectiveCompletions.size != snapshot.objectives.size) {
+            objectiveCompletions = BooleanArray(snapshot.objectives.size)
+        }
+        for (i in snapshot.objectives.indices) {
+            val complete = snapshot.objectives[i].complete
+            if (complete && !objectiveCompletions[i]) {
+                emitFeedback(type = GameFeedbackType.OBJECTIVE, amount = i + 1)
+            }
+            objectiveCompletions[i] = complete
+        }
     }
 
     override fun onLoopStopped() {
@@ -331,6 +458,19 @@ class GameViewModel(
         channel.paused = false
     }
 
+    /** Persists the current gem lesson, then advances to the next newly introduced gem. */
+    fun dismissGemIntro() {
+        val gem = _gemIntro.value ?: return
+        if (gemIntroDismissInFlight) return
+        gemIntroDismissInFlight = true
+        viewModelScope.launch {
+            progressStore.markGemIntroSeen(gem)
+            if (pendingGemIntros.firstOrNull() == gem) pendingGemIntros.removeFirst()
+            _gemIntro.value = pendingGemIntros.firstOrNull()
+            gemIntroDismissInFlight = false
+        }
+    }
+
     /**
      * Throws the attempt away and builds a fresh board for the same level.
      *
@@ -350,12 +490,14 @@ class GameViewModel(
             _hud.value = null
             _chainBanner.value = null
             _dropFlash.value = null
+            objectiveFeedbackReady = false
+            objectiveCompletions = BooleanArray(0)
             channel.paused = true
             channel.reset()
             _uiState.value = GameUiState.Loading
             val skin = channel.ballSkin
             val board = withContext(workDispatcher) { LevelBoard.create(currentLevel, currentConfig) }
-            publish(board, skin)
+            publish(board, skin, channel.trail)
         }
     }
 
@@ -366,6 +508,10 @@ class GameViewModel(
         mapper = null
         eventJob?.cancel()
         eventJob = null
+        pendingGemIntros.clear()
+        objectiveFeedbackReady = false
+        objectiveCompletions = BooleanArray(0)
+        _gemIntro.value = null
         _uiState.value = GameUiState.Loading
         super.onCleared()
     }
@@ -375,6 +521,8 @@ class GameViewModel(
         val level: LevelDef,
         val board: LevelBoard,
         val skin: BallSkin,
+        val trail: app.krafted.candytriangle.level.TrailType,
+        val newGems: List<GemType>,
     )
 
     companion object {

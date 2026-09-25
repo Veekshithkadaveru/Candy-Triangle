@@ -5,8 +5,8 @@ package app.krafted.candytriangle.engine
  *
  * This is the engine's only outward channel. B3 hangs gem smashes off [onPegContact] and candy
  * sensor checks off [afterStep]; B2's Candy Cup watches balls cross its lane in [afterStep]; B4
- * turns all of it into `SharedFlow<GameEvent>` for the ViewModel; D5 pitch-scales peg ticks by
- * `impactSpeed`.
+ * turns all of it into `SharedFlow<GameEvent>` for the ViewModel; feedback layers can scale a peg
+ * response by `impactSpeed`.
  *
  * Callbacks run on the game thread in the middle of a step: they must be quick, must not block and
  * must not call [PhysicsWorld.step] or [PhysicsWorld.advance] re-entrantly. They **may** call

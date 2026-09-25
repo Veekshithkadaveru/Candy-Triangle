@@ -107,6 +107,8 @@ data class LevelOutcome(
     val score: Int,
     val ballsRemaining: Int,
     val collected: Map<CandyColor, Int>,
+    /** The portion of [score] added by Sugar Rush; zero on a failed attempt. */
+    val sugarRushBonus: Int,
 )
 
 /**

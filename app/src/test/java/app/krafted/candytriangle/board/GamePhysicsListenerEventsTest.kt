@@ -91,6 +91,9 @@ class GamePhysicsListenerEventsTest {
             assertFalse(near.active)
             assertTrue(mid.active)
             assertTrue(otherColour.active)
+            val directHits = r.events.filterIsInstance<GameEvent.CandyPopped>().filter { it.isDirect }
+            assertEquals(listOf(500f, 505f, 495f), directHits.map { it.x })
+            assertEquals(listOf(600f, 600f, 600f), directHits.map { it.y })
             val pop = r.events.filterIsInstance<GameEvent.SugarPop>().single()
             assertEquals(GameEvent.SugarPop(CandyColor.PINK, 495f, 600f, 1), pop)
             assertEquals(mapOf(CandyColor.PINK to 4), r.session.collectedByColor)
@@ -132,6 +135,13 @@ class GamePhysicsListenerEventsTest {
             r.listener.onPegContact(ball, blast.peg, 100f)
             val fx = r.events.filterIsInstance<GameEvent.GemEffectTriggered>().single()
             assertEquals(GameEvent.GemEffectTriggered(GemType.BLAST, 400f, 500f, 2), fx)
+            assertEquals(
+                listOf(
+                    GameEvent.GemSmashed(GemType.SWEET, config.scoring.gemBrokenPoints, 600f, 500f),
+                    GameEvent.GemSmashed(GemType.BLAST, config.scoring.gemBrokenPoints, 400f, 500f),
+                ),
+                r.events.filterIsInstance<GameEvent.GemSmashed>(),
+            )
             assertEquals(mapOf(CandyColor.GREEN to 1, CandyColor.BLUE to 1), r.session.collectedByColor)
 
             // A second contact with the smashed gem is ignored.

@@ -9,66 +9,37 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** §10's three audio/haptics flags: default-on, and each independent of the others. */
+/** §10's persisted vibration preference. */
 class SettingsStoreTest {
 
     private val preferences = FakePreferencesDataStore()
     private val store = SettingsStore(preferences)
 
-    /**
-     * A fresh install must not boot silent — the synthesised SFX and music loops (D5) are part of
-     * the intended first run, so an unset flag reads as on.
-     */
     @Test
-    fun allFlagsDefaultToOnWhenUnset() = runTest {
-        assertTrue(store.soundEnabled.first())
-        assertTrue(store.musicEnabled.first())
+    fun vibrationDefaultsToOnWhenUnset() = runTest {
         assertTrue(store.vibrateEnabled.first())
         assertEquals(GameSettings(), store.settings.first())
     }
 
     @Test
-    fun settersRoundTrip() = runTest {
-        store.setSoundEnabled(false)
-        store.setMusicEnabled(false)
+    fun setterRoundTrips() = runTest {
         store.setVibrateEnabled(false)
 
-        assertFalse(store.soundEnabled.first())
-        assertFalse(store.musicEnabled.first())
         assertFalse(store.vibrateEnabled.first())
-        assertEquals(
-            GameSettings(soundEnabled = false, musicEnabled = false, vibrateEnabled = false),
-            store.settings.first(),
-        )
-
-        store.setMusicEnabled(true)
-        assertTrue(store.musicEnabled.first())
-        assertFalse(store.soundEnabled.first())
+        assertEquals(GameSettings(vibrateEnabled = false), store.settings.first())
     }
 
-    /** Muting the music must not mute the SFX — the Settings screen has three separate toggles. */
-    @Test
-    fun flagsAreIndependent() = runTest {
-        store.setMusicEnabled(false)
-
-        assertFalse(store.musicEnabled.first())
-        assertTrue(store.soundEnabled.first())
-        assertTrue(store.vibrateEnabled.first())
-    }
-
-    /** Pins §10's key spelling, so an existing save's flags keep working across releases. */
+    /** Pins §10's key spelling, so an existing save's vibration choice keeps working. */
     @Test
     fun readsTheSection10KeyNames() = runTest {
         val seeded = FakePreferencesDataStore(
             mutablePreferencesOf(
-                booleanPreferencesKey("sound_on") to false,
-                booleanPreferencesKey("music_on") to false,
                 booleanPreferencesKey("vibrate_on") to false,
             ),
         )
 
         assertEquals(
-            GameSettings(soundEnabled = false, musicEnabled = false, vibrateEnabled = false),
+            GameSettings(vibrateEnabled = false),
             SettingsStore(seeded).settings.first(),
         )
 
@@ -84,10 +55,10 @@ class SettingsStoreTest {
     fun coexistsWithProgressInOneDataStore() = runTest {
         val progress = ProgressStore(preferences)
 
-        store.setSoundEnabled(false)
+        store.setVibrateEnabled(false)
         progress.recordLevelResult(levelId = 3, crowns = 2, score = 1_200)
 
-        assertFalse(store.soundEnabled.first())
+        assertFalse(store.vibrateEnabled.first())
         assertEquals(2, progress.crownsFor(3).first())
     }
 }
